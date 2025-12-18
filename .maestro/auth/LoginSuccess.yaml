@@ -70,40 +70,35 @@ tags:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
 
-# Enter invalid OTP first (test validation)
+# Enter OTP into code field
 - tapOn:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
 - inputText:
-    label: Enter invalid OTP code
+    label: Enter valid OTP code
     text: '0000'
 
-- assertVisible:
-    label: Verify continue button is disabled with invalid OTP
-    id: ${output.login.continueButton}
-    enabled: false
-
-# Replace with valid OTP
+# Enter Passcode into code field
 - tapOn:
-    label: Clear and re-tap OTP field
+    label: Tap on OTP code field
     id: ${output.login.codeField}
 
 - inputText:
-    label: Enter valid OTP code
+    label: Enter valid passcode
     text: '101419'
 
 - hideKeyboard:
-    label: Hide keyboard after OTP entry
+    label: Hide keyboard after passcode entry
 
 - assertVisible:
-    label: Verify continue button is enabled with valid OTP
+    label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}
     enabled: true
 
-# Submit OTP and complete verification
+# Submit passcode and complete verification
 - tapOn:
-    label: Tap continue button to verify OTP
+    label: Tap continue button to verify passcode
     id: ${output.login.continueButton}
 
 # Navigate to home screen
