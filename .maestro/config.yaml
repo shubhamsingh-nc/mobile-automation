@@ -1,0 +1,9 @@
+flows:
+  - "auth/*"
+
+# Platform Configuration
+platform:
+  ios:
+    disableAnimations: true
+  android:
+    disableAnimations: true

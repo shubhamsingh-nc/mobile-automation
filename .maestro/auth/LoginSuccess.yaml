@@ -1,0 +1,136 @@
+appId: com.nymcard.masaar.dev
+tags:
+  - auth
+  - success
+  - login
+---
+# Load element definitions from POM
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../elements/login.js
+
+# Initialize and launch application
+- launchApp:
+    label: Launch app with clean state
+    clearState: true
+
+# Handle platform-specific onboarding
+- runFlow:
+    label: Dismiss Android 16KB warning dialog
+    when:
+      platform: android
+    commands:
+      - tapOn:
+          text: OK
+          optional: true
+
+- runFlow:
+    label: Navigate to login screen on iOS
+    when:
+      platform: ios
+    commands:
+      - tapOn:
+          id: ${output.login.goToLoginButton}
+
+# Verify initial state of login screen
+- assertVisible:
+    label: Verify phone number input is visible
+    id: ${output.login.phoneNumberInput}
+
+- assertVisible:
+    label: Verify login button is visible and disabled
+    id: ${output.login.loginButton}
+    enabled: false
+
+# Enter phone number
+- tapOn:
+    label: Tap on phone number input field
+    id: ${output.login.phoneNumberInput}
+
+- scroll:
+    label: Scroll to see full login form
+
+- inputText:
+    label: Enter valid phone number
+    text: '502562503'
+
+- assertVisible:
+    label: Verify login button is now enabled
+    id: ${output.login.loginButton}
+    enabled: true
+
+# Submit phone number and navigate to OTP
+- tapOn:
+    label: Tap login button to request OTP
+    id: ${output.login.loginButton}
+
+- assertVisible:
+    label: Verify OTP code field appears
+    id: ${output.login.codeField}
+
+# Enter invalid OTP first (test validation)
+- tapOn:
+    label: Tap on OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter invalid OTP code
+    text: '0000'
+
+- assertVisible:
+    label: Verify continue button is disabled with invalid OTP
+    id: ${output.login.continueButton}
+    enabled: false
+
+# Replace with valid OTP
+- tapOn:
+    label: Clear and re-tap OTP field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid OTP code
+    text: '101419'
+
+- hideKeyboard:
+    label: Hide keyboard after OTP entry
+
+- assertVisible:
+    label: Verify continue button is enabled with valid OTP
+    id: ${output.login.continueButton}
+    enabled: true
+
+# Submit OTP and complete verification
+- tapOn:
+    label: Tap continue button to verify OTP
+    id: ${output.login.continueButton}
+
+# Navigate to home screen
+- assertVisible:
+    label: Verify secondary button appears on dashboard
+    id: ${output.login.secondaryButton}
+
+- tapOn:
+    label: Tap secondary button to complete onboarding
+    id: ${output.login.secondaryButton}
+
+# Verify successful login to home screen
+- assertVisible:
+    label: Verify user is on home screen with transactions
+    id: ${output.login.latestTransactionsHeader}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android success screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: LoginSuccessAndroid
+
+- runFlow:
+    label: Take iOS success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: LoginSuccessIOS
