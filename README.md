@@ -48,28 +48,36 @@ masaar-automation/
 ├── README.md                          # This file
 ├── .gitignore
 └── <client-name>/                     # e.g., ata, neo, etc.
-    └── .maestro/
-        ├── config.yaml                # Test suite configuration
-        ├── elements/                  # Page Object Model (POM) definitions
-        │   ├── loadElements.yaml      # Imports all element definitions
-        │   └── <feature>.js           # Element definitions per feature
-        └── <feature>/                 # Feature-specific flows
-            ├── FlowName1.yaml
-            └── FlowName2.yaml
+    ├── .maestro/
+    │   ├── config.yaml                # Test suite configuration
+    │   ├── elements/                  # Page Object Model (POM) definitions
+    │   │   ├── loadElements.yaml      # Imports all element definitions
+    │   │   └── <feature>.js           # Element definitions per feature
+    │   └── <feature>/                 # Feature-specific flows
+    │       ├── FlowName1.yaml
+    │       └── FlowName2.yaml
+    └── test-output/                   # Test artifacts (screenshots, videos, logs)
+        ├── screenshots/
+        ├── *.mp4                      # Recorded videos
+        └── maestro.log                # Test execution logs
 ```
 
 ### Example: ATA Client Structure
 
 ```
 ata/
-└── .maestro/
-    ├── config.yaml
-    ├── elements/
-    │   ├── loadElements.yaml
-    │   └── login.js
-    └── auth/
-        ├── LoginSuccess.yaml
-        └── LoginFailure.yaml
+├── .maestro/
+│   ├── config.yaml
+│   ├── elements/
+│   │   ├── loadElements.yaml
+│   │   └── login.js
+│   └── auth/
+│       ├── LoginSuccess.yaml
+│       └── LoginFailure.yaml
+└── test-output/                       # Configured in config.yaml
+    ├── screenshots/
+    ├── maestro.log
+    └── *.mp4
 ```
 
 ## Understanding the Page Object Model (POM)
@@ -212,6 +220,8 @@ Follow this checklist when contributing new test flows to an existing client:
   flows:
     - "auth/*"
     - "payments/*"  # Add your feature folder here
+
+  testOutputDir: "../../<client-name>/test-output"
   ```
 - [ ] **Test your flows locally**:
   ```bash
@@ -261,6 +271,8 @@ Follow this checklist when contributing new test flows to an existing client:
    flows:
      - "auth/*"
      - "dashboard/*"
+
+   testOutputDir: "ata/test-output"
    ```
 
 ## Creating a New Client Package
@@ -276,6 +288,7 @@ If you're the first engineer setting up automation for a new client, follow this
 - [ ] **Create the package structure**:
   ```bash
   mkdir -p <client-name>/.maestro/elements
+  mkdir -p <client-name>/test-output
   ```
 
 - [ ] **Create the config.yaml file**:
@@ -283,6 +296,11 @@ If you're the first engineer setting up automation for a new client, follow this
   # <client-name>/.maestro/config.yaml
   flows:
     - "auth/*"  # Add your initial feature folder
+
+  # Test Output Configuration
+  # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory
+  # Path is relative to where the maestro command is executed from (project root)
+  testOutputDir: "<client-name>/test-output"
 
   # Platform Configuration
   platform:
@@ -332,11 +350,16 @@ If you're the first engineer setting up automation for a new client, follow this
 ```bash
 # Create structure
 mkdir -p neo/.maestro/elements
+mkdir -p neo/test-output
 
 # Create config.yaml
 cat > neo/.maestro/config.yaml <<EOF
 flows:
   - "auth/*"
+
+# Test Output Configuration
+# Path is relative to where the maestro command is executed from (project root)
+testOutputDir: "neo/test-output"
 
 platform:
   ios:
@@ -479,6 +502,124 @@ maestro test --platform ios <client-name>/.maestro/
 maestro test --platform android <client-name>/.maestro/
 ```
 
+### Custom Test Output Directory
+
+By default, test artifacts are configured in `config.yaml` to be stored in client-specific directories. You can override this using the `--test-output-dir` flag:
+
+```bash
+# Use custom output directory (overrides config.yaml setting)
+maestro test --test-output-dir=<client-name>/custom-output <client-name>/.maestro/
+
+# Use debug output directory for detailed debugging
+maestro test --debug-output=<client-name>/debug-logs <client-name>/.maestro/
+
+# Flatten output (no timestamps, useful for CI/CD)
+maestro test --flatten-debug-output --debug-output=<client-name>/ci-output <client-name>/.maestro/
+```
+
+**Note:**
+- The `testOutputDir` is already configured in each client's `config.yaml` file to ensure all artifacts (screenshots, logs, reports) are stored in client-specific directories (e.g., `ata/test-output/`), not in the root directory.
+- The path in `testOutputDir` is relative to where you execute the `maestro test` command (typically the project root), so `ata/test-output` resolves to the correct client-specific directory.
+- Always run `maestro test` commands from the project root directory for paths to resolve correctly.
+
+## Video Recording
+
+Maestro provides two ways to record videos of your test flows locally, which is especially useful for demos, bug reports, and documentation.
+
+### Method 1: Local Recording with Record Command
+
+Use the `maestro record --local` command to create a polished video of a single flow:
+
+```bash
+# Record a flow locally (saves to specified file)
+maestro record --local <client-name>/.maestro/<feature>/FlowName.yaml <client-name>/test-output/demo.mp4
+
+# Example: Record the login flow for ATA client
+maestro record --local ata/.maestro/auth/LoginSuccess.yaml ata/test-output/login-demo.mp4
+```
+
+**Important Notes:**
+- Videos are saved locally to the specified path
+- **Maximum recording duration:** Approximately 2-3 minutes per recording
+- Best for creating demo videos or bug reports
+
+### Method 2: In-Flow Recording (For Specific Sections)
+
+You can record specific portions of a flow using `startRecording` and `stopRecording` commands within your YAML flows:
+
+```yaml
+appId: com.nymcard.client.dev
+---
+- launchApp
+
+# Start recording a specific section
+- startRecording: critical_flow_section
+
+- tapOn: "Login"
+- inputText: "[email protected]"
+- tapOn: "Submit"
+
+# Stop recording
+- stopRecording
+
+- assertVisible: "Dashboard"
+```
+
+**Important Notes:**
+- Recording duration is limited to approximately 2-3 minutes per recording session
+- Videos are automatically stored in the configured `testOutputDir`
+- For longer test suites, use multiple recording sessions for different sections
+- Useful for capturing specific interactions during automated test runs
+
+## Test Artifacts and Output
+
+All test artifacts are automatically organized in client-specific directories to maintain a clean repository structure.
+
+### Artifact Types
+
+When you run tests, Maestro generates several types of artifacts:
+
+1. **Screenshots**:
+   - **Automatically captured on test failures only** (saved to `testOutputDir`)
+   - **Manual capture**: Use the `takeScreenshot` command in your flows to capture screenshots during successful tests
+   - Example: `- takeScreenshot: login_screen`
+2. **Logs**: Detailed execution logs (`maestro.log`)
+3. **Reports**: JUnit XML or HTML test reports
+4. **Videos**: Recorded flow executions (when using recording features)
+5. **Command Metadata**: JSON files with command execution details
+
+### Directory Structure
+
+```
+<client-name>/
+├── .maestro/
+│   ├── config.yaml           # testOutputDir configured here
+│   └── ...
+└── test-output/              # Configured in config.yaml
+    ├── screenshots/          # Auto-generated screenshots
+    ├── maestro.log          # Execution logs
+    ├── commands-*.json      # Command metadata
+    └── *.mp4               # Recorded videos
+```
+
+### Output Configuration Priority
+
+Maestro applies configuration in this order:
+
+1. **CLI flags** (`--test-output-dir`, `--debug-output`)
+2. **config.yaml** (`testOutputDir` setting)
+3. **Default** (`~/.maestro/tests/<datetime>/`)
+
+Since `testOutputDir` is configured in each client's `config.yaml`, all artifacts will automatically go to the client-specific directory unless you explicitly override it with CLI flags.
+
+### Best Practices for Artifacts
+
+- **Keep videos short**: Recording is limited to 2-3 minutes; break long flows into smaller recorded sections
+- **Use meaningful names**: When using `takeScreenshot`, provide descriptive names
+- **Clean up regularly**: Test artifacts can accumulate quickly; add cleanup scripts to your CI/CD pipeline
+- **Version control**: The `.gitignore` file is configured to exclude `test-output/` directories
+- **CI/CD integration**: Use `--flatten-debug-output` flag for cleaner CI artifact organization
+
 ## Common Maestro Commands
 
 | Command | Description |
@@ -492,6 +633,8 @@ maestro test --platform android <client-name>/.maestro/
 | `scroll` | Scroll down |
 | `swipe: { direction: "LEFT" }` | Swipe in direction |
 | `takeScreenshot: name` | Capture screenshot |
+| `startRecording: name` | Start recording a video section (max 2-3 min) |
+| `stopRecording` | Stop the current recording |
 | `runFlow: { file: "path" }` | Execute another flow |
 | `runScript: { file: "path.js" }` | Execute JavaScript file |
 
