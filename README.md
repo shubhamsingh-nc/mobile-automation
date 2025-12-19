@@ -145,7 +145,7 @@ maestro test --format html <client>/.maestro/   # Human-readable
 
 **Command-line recording** (demos, bug reports):
 ```bash
-maestro record --local <client>/.maestro/<feature>/Flow.yaml <client>/test-output/demo.mp4
+maestro record --local ./<client>/.maestro/<feature>/Flow.yaml <client>/test-output/demo.mp4
 ```
 
 **In-flow recording** (specific sections, max 2-3 minutes):
