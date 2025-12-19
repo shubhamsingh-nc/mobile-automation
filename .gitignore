@@ -1,0 +1,10 @@
+.idea
+.DS_Store
+
+# Maestro test artifacts
+**/test-output/
+**/debug-output/
+**/.maestro/tests/
+*.mp4
+report.xml
+report.html
