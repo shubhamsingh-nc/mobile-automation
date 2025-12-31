@@ -1,0 +1,216 @@
+appId: com.placeholder.id
+---
+- runFlow:
+     label: Setting target platform app id and Load element definitions
+     commands:
+       - runScript:
+           file: ../../elements/targetApp.js
+       - runScript:
+           file: ../../elements/login.js
+       - runScript:
+           file: ../../elements/forgot-passcode.js
+
+# Initialize and launch application
+- launchApp:
+    appId: ${output.targetAppId}
+    label: Launch app with clean state
+    clearState: true
+
+# Handle platform-specific onboarding
+- runFlow:
+    label: Dismiss Android 16KB warning dialog
+    when:
+      platform: android
+    commands:
+      - tapOn:
+          text: OK
+          optional: true
+
+- runFlow:
+    label: Navigate to login screen on iOS
+    when:
+      platform: ios
+    commands:
+      - tapOn:
+          id: ${output.login.goToLoginButton}
+
+# Verify initial state of login screen
+- assertVisible:
+     label: Verify phone number input is visible
+     id: ${output.login.phoneNumberInput}
+
+# Verify login button is visible and disabled
+- assertVisible:
+    label: Verify login button is visible and disabled
+    id: ${output.login.loginButton}
+    enabled: false
+
+# Enter phone number
+- tapOn:
+    label: Tap on phone number input field
+    id: ${output.login.phoneNumberInput}
+
+- scroll:
+    label: Scroll to see full login form
+
+- inputText:
+    label: Enter valid phone number
+    text: '508635393'
+
+- assertVisible:
+    label: Verify login button is now enabled
+    id: ${output.login.loginButton}
+    enabled: true
+
+# Submit phone number and navigate to OTP
+- tapOn:
+    label: Tap login button to request OTP
+    id: ${output.login.loginButton}
+
+- assertVisible:
+    label: Verify OTP code field appears
+    id: ${output.login.codeField}
+
+# Enter OTP into code field
+- tapOn:
+    label: Tap on OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid OTP code
+    text: '0000'
+
+# Check if navigate to passcode screen
+- assertVisible:
+    label: Verify Forgot Password label visible
+    id: ${output.forgotPasscode.goToForgotPasscode}
+
+# Tap on Forgot Password label to proceed to forgot password flow
+- tapOn:
+    label: Tap on forgot passcode label to proceed to forgot password flow
+    id: ${output.forgotPasscode.goToForgotPasscode}
+
+# Verify mobile number screen visible
+- assertVisible:
+    label: Verify OTP screen appears again
+    id: ${output.login.codeField}
+
+# Enter OTP into code field
+- tapOn:
+    label: Tap on OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid OTP code
+    text: '0000'
+
+# Mobile number verified screen appears
+- assertVisible:
+    label: Mobile number verified screen
+    id: ${output.forgotPasscode.mobileNumberVerified}
+
+# Tap on verify email address button to proceed to verify email address flow
+- tapOn:
+    label: Tap on verify email address button to navigate to verify email address flow
+    id: ${output.forgotPasscode.verifyEmailAddressButton}
+
+# Verify email address email screen visible
+- assertVisible:
+    label: Verify your email address screen appears
+    id: ${output.forgotPasscode.otpVerifyEmailAddressTitle}
+
+# Tap on OTP Field
+- tapOn:
+    label: Tap on email address OTP code field
+    id: ${output.login.codeField}
+
+# Enter email otp code
+- inputText:
+    label: Enter valid email OTP code
+    text: '0000'
+
+# Email address verified screen appears
+- assertVisible:
+    label: Email address verified screen
+    id: ${output.forgotPasscode.emailAddressVerified}
+
+# Tap on set passcode button to proceed to create passcode flow
+- tapOn:
+    label: Tap on Set Passcode button to proceed to create passcode flow
+    id: ${output.forgotPasscode.setPassCodeFlowButton}
+
+# Verify Create passcode screen visible
+- assertVisible:
+    label: Verify Create passcode screen visible
+    id: ${output.forgotPasscode.createPassCodeTitle}
+
+#Verify continue button is disabled initially
+- assertVisible:
+    label: Verify continue button is disabled initially
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+    enabled: false
+
+# Tap on Passcode Field
+- tapOn:
+    label: Tap on passcode field
+    id: ${output.login.codeField}
+
+# Enter new passcode
+- inputText:
+    label: Enter new valid passcode
+    text: '258012'
+
+#Verify continue button is enabled
+- assertVisible:
+    label: Verify continue button is enabled after passcode insertion
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+    enabled: true
+
+# Tap on continue button to proceed to confirm passcode flow
+- tapOn:
+    label: Tap on continue button to proceed to confirm passcode flow
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+
+# Verify Create passcode screen visible
+- assertVisible:
+    label: Verify Confirm passcode screen visible
+    id: ${output.forgotPasscode.confirmPassCodeTitle}
+
+# Tap on Passcode Field
+- tapOn:
+    label: Tap on passcode field
+    id: ${output.login.codeField}
+
+# Confirm the entered passcode
+- inputText:
+    label: Confirm the entered passcode
+    text: '258012'
+
+# Tap on continue button to proceed to confirm passcode flow
+- tapOn:
+    label: Tap on continue button to proceed to confirm passcode flow
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+
+# Verify passcode updated successfully screen visible
+- assertVisible:
+    label: Verify landed on Passcode updated successfully screen
+    id: ${output.forgotPasscode.passcodeUpdatedSuccessfully}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android success screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: PasscodeUpdatedSuccessAndroid
+
+- runFlow:
+    label: Take iOS success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: PasscodeUpdatedSuccessIOS
+
+
+
+

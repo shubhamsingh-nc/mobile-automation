@@ -5,18 +5,19 @@ tags:
   - success
   - login
 ---
-#Load target app id from POM
+# Load target app id from POM
 - runFlow:
     label: Setting target platform app id
-    commands: 
+    commands:
       - runScript:
-          file: ../elements/targetApp.js
+          file: ../../elements/targetApp.js
 # Load element definitions from POM
 - runFlow:
     label: Load element definitions
     commands:
       - runScript:
-          file: ../elements/login.js
+          file: ../../elements/login.js
+          
 
 # Initialize and launch application
 - launchApp:
@@ -42,10 +43,10 @@ tags:
       - tapOn:
           id: ${output.login.goToLoginButton}
 
-## Verify initial state of login screen
+# Verify initial state of login screen
 - assertVisible:
-    label: Verify phone number input is visible
-    id: ${output.login.phoneNumberInput}
+     label: Verify phone number input is visible
+     id: ${output.login.phoneNumberInput}
 
 # Verify login button is visible and disabled
 - assertVisible:
