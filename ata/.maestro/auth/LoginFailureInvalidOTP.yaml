@@ -1,14 +1,13 @@
 appId: com.placeholder.appid
-
 tags:
   - auth
-  - success
+  - failure
   - login
 ---
 #Load target app id from POM
 - runFlow:
     label: Setting target platform app id
-    commands: 
+    commands:
       - runScript:
           file: ../elements/targetApp.js
 # Load element definitions from POM
@@ -26,7 +25,7 @@ tags:
 
 # Handle platform-specific onboarding
 - runFlow:
-    label: Dismiss Android 16KB warning dialog
+    label: Dismiss Android permission dialog
     when:
       platform: android
     commands:
@@ -42,12 +41,11 @@ tags:
       - tapOn:
           id: ${output.login.goToLoginButton}
 
-## Verify initial state of login screen
+# Verify initial state of login screen
 - assertVisible:
     label: Verify phone number input is visible
     id: ${output.login.phoneNumberInput}
 
-# Verify login button is visible and disabled
 - assertVisible:
     label: Verify login button is visible and disabled
     id: ${output.login.loginButton}
@@ -63,7 +61,7 @@ tags:
 
 - inputText:
     label: Enter valid phone number
-    text: '508635393'
+    text: '502562503'
 
 - assertVisible:
     label: Verify login button is now enabled
@@ -79,62 +77,44 @@ tags:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
 
-# Enter OTP into code field
+# Enter and verify OTP input section
 - tapOn:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
+- assertVisible:
+    label: Verify OTP input section is visible
+    id: ${output.login.otpInputSection}
+
+- assertNotVisible:
+    label: Verify error OTP section is not visible initially
+    id: ${output.login.errorOtpInputSection}
+
+# Enter invalid OTP code
 - inputText:
-    label: Enter valid OTP code
-    text: '0000'
+    label: Enter invalid OTP code to trigger error
+    text: '1919'
 
-# Enter Passcode into code field
-- tapOn:
-    label: Tap on OTP code field
-    id: ${output.login.codeField}
-
-- inputText:
-    label: Enter valid passcode
-    text: '988222'
-
-- hideKeyboard:
-    label: Hide keyboard after passcode entry
+# Verify error state
+- assertNotVisible:
+    label: Verify OTP input section is hidden after invalid entry
+    id: ${output.login.otpInputSection}
 
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
-    id: ${output.login.continueButton}
-    enabled: true
-
-# Submit passcode and complete verification
-- tapOn:
-    label: Tap continue button to verify passcode
-    id: ${output.login.continueButton}
-
-# Skip for Trust device
-- assertVisible:
-    label: Verify secondary button appears on dashboard
-    id: ${output.login.secondaryButton}
-
-- tapOn:
-    label: Tap secondary button to complete onboarding
-    id: ${output.login.secondaryButton}
-
-# Verify successful login to home screen
-- assertVisible:
-    label: Verify user is on home screen with transactions
-    id: ${output.login.latestTransactionsHeader}
+    label: Verify error OTP section is now visible
+    id: ${output.login.errorOtpInputSection}
 
 # Capture platform-specific screenshots
 - runFlow:
-    label: Take Android success screenshot
+    label: Take Android failure screenshot
     when:
       platform: android
     commands:
-      - takeScreenshot: LoginSuccessAndroid
+      - takeScreenshot: LoginFailureAndroid
 
 - runFlow:
-    label: Take iOS success screenshot
+    label: Take iOS failure screenshot
     when:
       platform: ios
     commands:
-      - takeScreenshot: LoginSuccessIOS
+      - takeScreenshot: LoginFailureIOS
