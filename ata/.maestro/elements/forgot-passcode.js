@@ -17,8 +17,13 @@ output.forgotPasscode = {
   createPassCodeTitle: 'create_passcode_title',
   confirmPassCodeTitle: 'confirm_passcode_title',
   confirmCreatePasscodeButton: 'confirm_create_passcode_button',
+  showPasscodeButton: 'show_passcode_button',
 
-  passcodeUpdatedSuccessfully: 'passcode_updated_successfully'
+  passcodeUpdatedSuccessfully: 'passcode_updated_successfully',
+
+  invalidPasscode: 'invalid_passcode',
+  passcodeMismatch: 'passcode_mismatch',
+  passcodePolicyViolation: 'passcode_policy_violation'
 
 
 }

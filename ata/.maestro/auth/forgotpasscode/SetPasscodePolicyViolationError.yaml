@@ -2,18 +2,19 @@ appId: com.placeholder.id
 
 tags:
   - auth
-  - success
+  - error
   - forgotpasscode
+  - setpasscode
 ---
 - runFlow:
-     label: Setting target platform app id and Load element definitions
-     commands:
-       - runScript:
-           file: ../../elements/targetApp.js
-       - runScript:
-           file: ../../elements/login.js
-       - runScript:
-           file: ../../elements/forgot-passcode.js
+    label: Setting target platform app id and Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/targetApp.js
+      - runScript:
+          file: ../../elements/login.js
+      - runScript:
+          file: ../../elements/forgot-passcode.js
 
 # Initialize and launch application
 - launchApp:
@@ -41,8 +42,8 @@ tags:
 
 # Verify initial state of login screen
 - assertVisible:
-     label: Verify phone number input is visible
-     id: ${output.login.phoneNumberInput}
+    label: Verify phone number input is visible
+    id: ${output.login.phoneNumberInput}
 
 # Verify login button is visible and disabled
 - assertVisible:
@@ -160,6 +161,74 @@ tags:
     label: Tap on passcode field
     id: ${output.login.codeField}
 
+# Tap on Show passcode to visible
+- tapOn:
+    label: Tap on show passcode button
+    id: ${output.forgotPasscode.showPasscodeButton}
+
+# Handle platform-specific set passcode error checking
+- runFlow:
+    label: set passcode error checking
+    when:
+      platform: android
+    commands:
+    - inputText:
+        label: Enter invalid passcode
+        text: '387'
+      #Verify passcode policy violation error is visible
+    - assertVisible:
+        label: Verify passcode policy violation error is visible
+        id: ${output.forgotPasscode.passcodePolicyViolation}
+        enabled: true
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android passcode length policy violation error screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: PasscodeLengthPolicyViolationErrorAndroid
+
+# Clear input field
+- eraseText
+
+# Enter repetitive digits in passcode
+- inputText:
+    label: Enter repetitive digits in passcode
+    text: '777777'
+
+#Verify passcode policy violation error is visible
+- assertVisible:
+    label: Verify passcode policy violation error is visible
+    id: ${output.forgotPasscode.passcodePolicyViolation}
+    enabled: true
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android passcode repetition policy violation error screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: PasscodeRepetitionPolicyViolationErrorAndroid
+
+- runFlow:
+    label: Take iOS passcode repetition policy violation error screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: PasscodeRepetitionPolicyViolationErrorIOS
+
+- runFlow:
+    label: Setting cursor position to end of input field for iOS
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          label: Tap on passcode field
+          id: ${output.login.codeField}
+# Clear input field
+- eraseText
+
 # Generate new passcode
 - evalScript: ${
     function sixDigitNoRepeat() {
@@ -174,11 +243,6 @@ tags:
     return digits.slice(0, 6).join('');}
 
     output.passcode = sixDigitNoRepeat()}
-
-# Tap on Show passcode to visible
-- tapOn:
-    label: Tap on show passcode button
-    id: ${output.forgotPasscode.showPasscodeButton}
 
 # Enter new passcode
 - inputText:
@@ -211,51 +275,48 @@ tags:
     label: Tap on passcode field
     id: ${output.login.codeField}
 
+# Generate new passcode
+- evalScript: ${
+    function sixDigitNoRepeat() {
+    const digits = ['0','1','2','3','4','5','6','7','8','9'];
+    
+    for (let i = digits.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = digits[i];
+    digits[i] = digits[j];
+    digits[j] = tmp;}
+    
+    return digits.slice(0, 6).join('');}
+
+    output.passcode = sixDigitNoRepeat()}
+
 # Confirm the entered passcode
 - inputText:
     label: Confirm the entered passcode
     text: ${output.passcode}
 
-# Capture platform-specific screenshots for updated passcode
-- runFlow:
-    label: Take Android confirm passcode screenshot
-    when:
-      platform: android
-    commands:
-      - takeScreenshot: ConfirmPasscodeAndroid
-
-- runFlow:
-    label: Take iOS confirm passcode screenshot
-    when:
-      platform: ios
-    commands:
-      - takeScreenshot: ConfirmPasscodeIOS
-        
 # Tap on continue button to proceed to confirm passcode flow
 - tapOn:
     label: Tap on continue button to proceed to confirm passcode flow
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
 
-# Verify passcode updated successfully screen visible
+
+#Verify passcode mismatch error is visible
 - assertVisible:
-    label: Verify landed on Passcode updated successfully screen
-    id: ${output.forgotPasscode.passcodeUpdatedSuccessfully}
+    label: Verify passcode mismatch error is visible
+    id: ${output.forgotPasscode.passcodeMismatch}
 
 # Capture platform-specific screenshots
 - runFlow:
-    label: Take Android success screenshot
+    label: Take Android passcode mismatch error screenshot
     when:
       platform: android
     commands:
-      - takeScreenshot: PasscodeUpdatedSuccessAndroid
+      - takeScreenshot: PasscodeMismatchErrorAndroid
 
 - runFlow:
-    label: Take iOS success screenshot
+    label: Take iOS passcode mismatch error screenshot
     when:
       platform: ios
     commands:
-      - takeScreenshot: PasscodeUpdatedSuccessIOS
-
-
-
-
+      - takeScreenshot: PasscodeMismatchErrorIOS

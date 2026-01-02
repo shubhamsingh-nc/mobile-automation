@@ -96,7 +96,7 @@ tags:
 
 - inputText:
     label: Enter valid passcode
-    text: '988222'
+    text: '946875'
 
 - hideKeyboard:
     label: Hide keyboard after passcode entry
