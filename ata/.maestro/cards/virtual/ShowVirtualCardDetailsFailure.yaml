@@ -1,0 +1,91 @@
+appId: com.placeholder.id
+
+tags:
+  - cards
+  - failure
+  - virtual_card
+---
+- runFlow:
+    label: Load element definitions for cards
+    commands:
+      - runScript:
+          file: ../../elements/cards.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow: ../../auth/login/LoginSuccess.yaml
+
+- assertVisible:
+    label: Verify on My Card visible on Home screen
+    id: ${output.cards.homeCardTile}
+
+# Tap on My Card tile to navigate to My Card screen
+- tapOn:
+    label: Tap on card tile
+    id: ${output.cards.homeCardTile}
+
+# Assert card is Virtual card
+- assertNotVisible:
+    label: Verify Virtual Card visible
+    id: ${output.cards.cardChipAndNFC}
+
+# Checking if card is ACTIVE
+- assertVisible:
+    label: Verify Card details not blank
+    id: ${output.cards.cardStatePresent}
+
+# Verify if Show card details button visible
+- assertVisible:
+    label: Verify Show Card details option button visible
+    id: ${output.cards.showDetailsButton}
+
+# Tap on Show card details button to proceed for passcode verification
+- tapOn:
+    label: Tap on Show Card details option button
+    id: ${output.cards.showDetailsButton}
+
+# Tap on passcode first field
+- tapOn:
+    label: Tap on passcode first field
+    id: ${output.login.codeField}
+
+# Enter Passcode into code field
+- inputText:
+    label: Enter an invalid passcode
+    text: '112233'
+
+- hideKeyboard:
+    label: Hide keyboard after passcode entry
+
+- assertVisible:
+    label: Verify continue button is enabled with valid passcode
+    id: ${output.login.continueButton}
+    enabled: true
+
+# Tap on continue button to complete verification for show card details
+- tapOn:
+    label: Tap on continue button to complete authentication for showing card details
+    id: ${output.login.continueButton}
+
+# Verify card details not visible
+- assertNotVisible:
+    label: Verify Card number not visible
+    id: ${output.cards.cardNumberVisible}
+
+# Check for error notification
+- assertVisible:
+    text: "(?i)invalid passcode"
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android Show Virtual Card details Invalid OTP failure screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: ShowVirtualCardDetailFailureAndroid
+
+- runFlow:
+    label: Take iOS Show Virtual Card details Invalid OTP failure screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: ShowVirtualCardDetailFailureIOS

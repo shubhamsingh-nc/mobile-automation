@@ -1,0 +1,193 @@
+appId: com.placeholder.id
+
+tags:
+  - cards
+  - success
+  - virtual_card
+---
+- runFlow:
+    label: Load element definitions for cards
+    commands:
+      - runScript:
+          file: ../../elements/cards.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow: ../../auth/login/LoginSuccess.yaml
+
+- assertVisible:
+    label: Verify on My Card visible on Home screen
+    id: ${output.cards.homeCardTile}
+
+# Tap on My Card tile to navigate to My Card screen
+- tapOn:
+    label: Tap on card tile
+    id: ${output.cards.homeCardTile}
+
+
+# Unfreeze card NORMALIZE STATE → Ensure card is UNFROZEN
+- runFlow:
+    when:
+      visible:
+        id: ${output.cards.unfreezeCardButton}
+    commands:
+      - tapOn:
+          id: ${output.cards.unfreezeCardButton}
+
+        # Tap on passcode first field
+      - tapOn:
+          label: Tap on passcode first field
+          id: ${output.login.codeField}
+
+        # Enter Passcode into code field
+      - inputText:
+          label: Enter valid passcode
+          text: '946875'
+
+      - hideKeyboard:
+          label: Hide keyboard after passcode entry
+
+      - assertVisible:
+          label: Verify continue button is enabled with valid passcode
+          id: ${output.login.continueButton}
+          enabled: true
+
+        # Tap on continue button to complete verification for show card details
+      - tapOn:
+          label: Tap on continue button to complete authentication for showing card details
+          id: ${output.login.continueButton}
+
+# Assert card is Virtual card
+- assertNotVisible:
+    label: Verify Virtual Card visible
+    id: ${output.cards.cardChipAndNFC}
+
+# Checking if card is ACTIVE
+- assertVisible:
+    label: Verify Card details not blank
+    id: ${output.cards.cardStatePresent}
+
+# Verify if Freeze card button visible
+- assertVisible:
+    label: Verify Freeze Card option button visible
+    id: ${output.cards.freezeCardButton}
+
+# Tap on Freeze card button to proceed for passcode verification
+- tapOn:
+    label: Tap on Freeze Card option button
+    id: ${output.cards.freezeCardButton}
+
+# Tap on passcode first field
+- tapOn:
+    label: Tap on passcode first field
+    id: ${output.login.codeField}
+
+# Enter Passcode into code field
+- inputText:
+    label: Enter valid passcode
+    text: '946875'
+
+- hideKeyboard:
+    label: Hide keyboard after passcode entry
+
+- assertVisible:
+    label: Verify continue button is enabled with valid passcode
+    id: ${output.login.continueButton}
+    enabled: true
+
+# Tap on continue button to complete verification for show card details
+- tapOn:
+    label: Tap on continue button to complete authentication for showing card details
+    id: ${output.login.continueButton}
+
+# Verify if Card frozen layout visible
+- assertVisible:
+    label: Verify Card frozen background visible
+    id: ${output.cards.cardFrozenBackground}
+
+# Verify if Card frozen label visible
+- assertVisible:
+    label: Verify Card frozen label visible
+    id: ${output.cards.cardFrozenLabel}
+
+# Verify if Freeze card button label changed to Unfreeze card visible
+- assertVisible:
+    label: Verify if Freeze card button label changed to Unfreeze card visible
+    id: ${output.cards.unfreezeCardButton}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android Freeze card screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: FreezeVirtualCardAndroid
+
+- runFlow:
+    label: Take iOS Freeze card screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: FreezeVirtualCardDetailIOS
+
+
+- assertVisible:
+    label: Verify Unfreeze Card option button visible
+    id: ${output.cards.unfreezeCardButton}
+
+# Tap on Unfreeze card button to proceed for pass
+- tapOn:
+    label: Tap on Unfreeze Card option button
+    id: ${output.cards.unfreezeCardButton}
+
+# Tap on passcode first field
+- tapOn:
+      label: Tap on passcode first field
+      id: ${output.login.codeField}
+
+# Enter Passcode into code field
+- inputText:
+      label: Enter valid passcode
+      text: '946875'
+
+- hideKeyboard:
+      label: Hide keyboard after passcode entry
+
+- assertVisible:
+      label: Verify continue button is enabled with valid passcode
+      id: ${output.login.continueButton}
+      enabled: true
+
+# Tap on continue button to complete verification for show card details
+- tapOn:
+    label: Tap on continue button to complete authentication for showing card details
+    id: ${output.login.continueButton}
+
+# Verify if Card frozen layout visible
+- assertNotVisible:
+    label: Verify Card frozen background visible
+    id: ${output.cards.cardFrozenBackground}
+
+# Verify if Card frozen label visible
+- assertNotVisible:
+    label: Verify Card frozen label visible
+    id: ${output.cards.cardFrozenLabel}
+
+# Verify if Freeze card button label changed to Unfreeze card visible
+- assertVisible:
+    label: Verify if Unfreeze card button label changed to Freeze card visible
+    id: ${output.cards.freezeCardButton}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android Unfreeze card screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: UnfreezeVirtualCardAndroid
+
+- runFlow:
+    label: Take iOS Unfreeze card screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: UnfreezeVirtualCardDetailIOS
