@@ -27,3 +27,31 @@ output.cards = {
     cardFrozenBackground: 'frozen_card_background',
     cardFrozenLabel: 'frozen_card_label'
 }
+
+output.cardControls = {
+    cardControlsTitle: 'card_controls_title',
+
+    saveButton: 'save_button',
+
+    ecommerce: 'ecommerce',
+    pos: 'pos',
+    atmWithdrawl: 'atm_withdrawl',
+    rewardPlatform: 'reward_platform',
+
+    ecommerceInactive: 'ecommerce_inactive',
+    posInactive: 'pos_inactive',
+    atmWithdrawlInactive: 'atm_withdrawl_inactive',
+    rewardPlatformInactive: 'reward_platform_inactive',
+
+    ecommerceActive: 'ecommerce_active',
+    posActive: 'pos_active',
+    atmWithdrawlActive: 'atm_withdrawl_active',
+    rewardPlatformActive: 'reward_platform_active'
+}
+
+output.cardTransactionLimits = {
+    transactionLimitTitle: 'transaction_limits_title',
+    ecommerceTransactionLimit: 'ecommerce_transaction_limit',
+    ecommerceAndPosTransactionLimit: 'ecommerce_and_pos_transaction_limits',
+    atmWithdrawlTransactionLimit: 'atm_withdrawl_limit',
+}
