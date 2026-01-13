@@ -1,0 +1,102 @@
+appId: com.nymcard.template.neoSTG
+---
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../elements/NEOLogin.js
+
+- launchApp:
+    clearState: true
+#Onboarding Screen Test Cases
+- assertVisible:
+    label: image0
+    id: ${output.login.courserImage0}
+- swipe:
+    direction: LEFT
+    duration: 300
+- assertVisible:
+    label: image1
+    id: ${output.login.courserImage1}
+- swipe:
+    direction: LEFT
+    duration: 300
+- assertVisible:
+    label: image2
+    id: ${output.login.courserImage2}
+- assertVisible:
+    label: Get Started
+    id: ${output.login.getStartedButton}
+- tapOn:
+    label: Get Started
+    id: ${output.login.getStartedButton}
+- assertVisible:
+    label: Welcome to NEO Iraq!
+    id: '${output.login.loginWelcomeLabel}'
+#LoginScreen test cases
+- assertVisible:
+    label: Welcome to NEO Iraq!
+    id: '${output.login.loginWelcomeLabel}'
+- assertVisible:
+    id: '${output.login.loginIRQFlag}'
+- assertVisible:
+    label: '+964'
+    id: '${output.login.loginCountryCode}'
+- assertVisible:
+    label: Enter mobile number
+    id: '${output.login.loginInputTextEnterMobileNumber}'
+- assertVisible:
+    label: EN
+    id: '${output.login.loginLanguageButton}'
+- tapOn:
+    id: '${output.login.loginLanguageButton}'
+- assertVisible:
+    label: Select Language
+    id: '${output.login.loginLanguageSheet}'
+- assertVisible:
+    label: Change Language
+    id: '${output.login.loginChangeLanguageButton}'
+- tapOn:
+    id: '${output.login.loginSheetCloseButton}'
+- assertVisible:
+    label: Verify continue button is visible and disabled
+    id: ${output.login.loginContinueButton}
+    enabled: false
+- tapOn:
+    label: Tap on phone number input field
+    id: ${output.login.loginInputTextEnterMobileNumber}
+- inputText:
+    label: Enter mobile number
+    text: '1246759898'
+- assertVisible:
+    label: Verify continue button is visible and disabled
+    id: ${output.login.loginContinueButton}
+    enabled: true
+- tapOn:
+    id: '${output.login.loginContinueButton}'
+#Loading state
+- assertNotVisible:
+    label: Loading please wait
+    id: '${output.login.loaderMessage}'
+- extendedWaitUntil:
+    notVisible:
+      label: Loading please wait
+      id: '${output.login.loaderMessage}'
+    timeout: 300000 # Wait for up to 15 seconds
+#OTP test cases
+- assertNotVisible:
+    label: Enter OTP Code
+    id: '${output.login.otpTitle}'
+- runFlow:
+    label: Take Android success screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: LoginFailureAndroid
+
+- runFlow:
+    label: Take iOS success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: LoginFailureIOS

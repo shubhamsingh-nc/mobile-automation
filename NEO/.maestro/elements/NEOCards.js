@@ -1,0 +1,20 @@
+output.cardstab = {
+cardBankLogo: 'card_bank_logo',
+cardBalance: 'card_balance',
+cardCopyImage: 'card_copy_image',
+cardNumber: 'card_number',
+cardValidity: 'card_validity',
+cardCvv: 'card_cvv',
+cardHolderName: 'card_holder_name',
+cardVisaLogo: 'card_visa_logo',
+dinarCardBackgroundImage: '_background_image',
+classicCardBackgroundImage: 'NEO Visa Classic Card_background_image',
+virtualCardBackgroundImage: 'NEO Visa Virtual Card _background_image',
+cardHeader: 'card_header',
+virtualCardProductTitle: 'NEO Visa Virtual Card _title',
+dinarCardProductTitle: '_title',
+classicCardProductTitle: 'NEO Visa Classic Card_title',
+cardStatus: 'card_status',
+yourCards: 'your_cards',
+yourCardsSection: 'your_cards_section'
+}

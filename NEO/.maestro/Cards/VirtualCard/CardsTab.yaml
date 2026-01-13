@@ -1,0 +1,26 @@
+appId: com.nymcard.template.neoSTG
+---
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/NEOCards.js
+- launchApp:
+    clearState: true
+- runFlow: '../../auth/LoginSuccess.yaml'
+- tapOn:
+    text: Cards
+    index: 1
+- extendedWaitUntil:
+    visible:
+      label: Loading Cards
+      id: '${output.cardstab.classicCardProductTitle}'
+    timeout: 300000
+- swipe:
+    direction: LEFT
+    duration: 1000
+- assertVisible:
+    label: Virtual Card
+    id: '${output.cardstab.virtualCardProductTitle}'
+- tapOn:
+    id: '${output.cardstab.virtualCardBackgroundImage}'

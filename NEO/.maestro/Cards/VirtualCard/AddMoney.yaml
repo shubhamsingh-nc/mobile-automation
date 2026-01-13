@@ -1,0 +1,54 @@
+appId: com.nymcard.template.neoSTG
+---
+- launchApp:
+    clearState: true
+- runFlow: 'CardDetails.yaml'
+- tapOn: |-
+    Add
+    Money
+
+- assertVisible: USD 10
+- assertVisible: USD 20
+- assertVisible: USD 50
+- assertVisible: USD 100
+- tapOn: USD 10
+- assertVisible: Transfer
+- tapOn: Transfer
+- assertVisible: Transfer Confirmation
+- assertVisible: Confirm Transfer
+- tapOn: Confirm Transfer
+- assertVisible:
+    label: Enter Passcode
+    id: '${output.login.passcodeTitle}'
+- assertVisible:
+    id: '${output.login.passcodeCheckBox}'
+- assertTrue:
+    condition: "document.querySelector('${output.login.passcodeCheckBox}').checked === false"
+    label: 'Verify Checkbox is not selected'
+- tapOn:
+    label: Tap on the checkbox to select it
+    id: '${output.login.passcodeCheckBox}'
+- assertTrue:
+    condition: "document.querySelector('${output.login.passcodeCheckBox}').checked === true"
+    label: 'Verify Checkbox is selected'
+- tapOn:
+    label: Tap on the checkbox to deselect it
+    id: '${output.login.passcodeCheckBox}'
+- assertTrue:
+    condition: "document.querySelector('${output.login.passcodeCheckBox}').checked === false"
+    label: 'Verify Checkbox is not selected'
+- assertVisible:
+    label: Show Passcode
+    id: '${output.login.showPasscode}'
+- assertVisible:
+    label: Forgot your passcode
+    id: '${output.login.forgotPasscode}'
+- tapOn:
+    label: Tap on OTP code field
+    id: '${output.login.otpTextField}'
+- inputText:
+    label: Enter valid passcode
+    text: '2580'
+- assertVisible: Transfer Success
+- assertVisible: Home
+- tapOn: Home

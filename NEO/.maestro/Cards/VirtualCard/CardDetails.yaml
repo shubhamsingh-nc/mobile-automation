@@ -1,0 +1,57 @@
+appId: com.nymcard.template.neoSTG
+---
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/NEOCards.js
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/CardDetails.js
+- launchApp:
+    clearState: true
+- runFlow: 'CardsTab.yaml'
+- assertVisible:
+   label: Card Balance
+   id: '${output.cardstab.cardBalance}'
+- assertVisible:
+   label: Card Number
+   id: '${output.cardstab.cardNumber}'
+- assertVisible:
+   label: Card Validity
+   id: '${output.cardstab.cardValidity}'
+- assertVisible:
+   label: Card CVV
+   id: '${output.cardstab.cardCvv}'
+- assertVisible:
+   label: Card Holder Name
+   id: '${output.cardstab.cardHolderName}'
+- assertVisible: |-
+    Add
+    Money
+- assertVisible: |-
+    Show
+    Details
+- assertVisible: |-
+    Freeze/
+    Unfreeze
+- assertVisible: |-
+    Transfer
+    Funds
+- assertVisible: |-
+    Show
+    Limits
+- assertVisible: |-
+    Terminate
+    Card
+- assertVisible: |-
+    Download
+    Statement
+- scrollUntilVisible:
+    element: "Transactions"
+    direction: DOWN
+    timeout: 100000
+    speed: 50
+- assertVisible: View All

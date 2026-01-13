@@ -1,0 +1,35 @@
+appId: com.nymcard.template.neoSTG
+---
+- launchApp:
+    clearState: true
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/NEOCards.js
+- runFlow:
+    label: Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/CardDetails.js
+- runFlow: 'CardDetails.yaml'
+- scrollUntilVisible:
+    element:
+      id: card_balance
+    direction: UP
+- tapOn: |-
+    Freeze/
+    Unfreeze
+- extendedWaitUntil:
+    visible:
+      label: Freezed Card
+      text: Frozen
+    timeout: 300000
+- tapOn: |-
+    Freeze/
+    Unfreeze
+- extendedWaitUntil:
+    notVisible:
+      label: Freezed Card
+      text: Frozen
+    timeout: 300000
