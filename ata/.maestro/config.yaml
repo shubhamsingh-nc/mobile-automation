@@ -1,23 +1,38 @@
 flows:
-  - 'auth/**/*.yaml'
-  - 'cards/**/*.yaml'
+  - "auth/**/*.yaml"
+  - "cards/**/*.yaml"
 executionOrder:
   continueOnFailure: true
   flowsOrder:
     - "LoginSuccess"
     - "LoginFailureInvalidOTP"
-    - "SetPasscodePolicyViolationError"
+    - "LoginFailureIncorrectPasscode"
     - "ForgotPasscodeSuccess"
-    - "FreezeUnFreezeVirtualCardSuccess"
+    - "SetPasscodePolicyViolationError"
     - "ShowVirtualCardDetailsSuccess"
+    - "ShowVirtualCardDetailsFailure"
+    - "ShowPhysicalCardDetailsSuccess"
+    - "ShowPhysicalCardDetailsFailure"
     - "HideVirtualCardDetailsSuccess"
-    - "VirtualCardActivateEcommerce"
+    - "HidePhysicalCardDetailsSuccess"
+    - "FreezeUnfreezeVirtualCardSuccess"
+    - "FreezeUnfreezePhysicalCardSuccess"
+    - "VirtualCardAllowEcommerce"
+    - "PhysicalCardAllowEcommerce"
     - "VirtualCardDailyLimitSuccess"
+    - "PhysicalCardATMWithDrawlDailyLimitSuccess"
+    - "VirtualCardMonthlyLimitSuccess"
+    - "PhysicalCardATMWithDrawlMonthlyLimitSuccess"
+    - "VirtualCardYearlyLimitSuccess"
+    - "PhysicalCardATMWithDrawlYearlyLimitSuccess"
+    - "PhysicalCardE-commAndPOSDailyLimitSuccess"
+    - "PhysicalCardE-commAndPOSMonthlyLimitSuccess"
+    - "PhysicalCardE-commAndPOSYearlyLimitSuccess"
 
 # Test Output Configuration
 # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory
 # Path is relative to where the maestro command is executed from
-testOutputDir: 'ata/test-output'
+testOutputDir: "ata/test-output"
 
 # Platform Configuration
 platform:
