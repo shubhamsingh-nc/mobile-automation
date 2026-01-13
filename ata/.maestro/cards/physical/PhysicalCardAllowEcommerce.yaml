@@ -1,0 +1,127 @@
+appId: com.placeholder.id
+
+tags:
+  - cards
+  - card_controls
+  - physical_card
+
+---
+- runFlow:
+    label: Load element definitions for cards
+    commands:
+      - runScript:
+          file: ../../elements/cards.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "505050525"
+      PASSCODE: "123567"
+
+- assertVisible:
+    label: Verify on My Card visible on Home screen
+    id: ${output.cards.homeCardTile}
+
+# Tap on My Card tile to navigate to My Card screen
+- tapOn:
+    label: Tap on card tile
+    id: ${output.cards.homeCardTile}
+
+# Verify Physical Card visible
+- assertVisible:
+    label: Verify Physical Card visible
+    id: ${output.cards.cardChipAndNFC}
+
+# Verify Physical card is on its way banner not showing
+- assertNotVisible:
+    label: Verify Physical card is on its way banner not showing
+    id: ${output.cards.physicalCardOnItsWay}
+
+# Verifying card is not INACTIVE state
+- assertVisible:
+    label: Verifying card is not INACTIVE state
+    id: ${output.cards.cardStatePresent}
+
+# Verify Card controls options visible
+- assertVisible:
+    label: Verify Card controls option visible
+    id: ${output.cards.cardControlsButton}
+
+# Tap on Card controls button to navigate to Card controls screen
+- tapOn:
+    label: Tap on Card controls option
+    id: ${output.cards.cardControlsButton}
+
+# Verify Card controls screen visible by checking Card Control page title
+- assertVisible:
+    label: Verify Card controls screen visible
+    id: ${output.cardControls.cardControlsTitle}
+
+# Verify Card control E-commerce option visible
+- assertVisible:
+    label: Verify Ecommerce option visible
+    id: ${output.cardControls.ecommerce}
+
+# ACTIVE E-commerce NORMALIZE STATE → Ensure control is INACTIVE state
+- runFlow:
+    when:
+      visible:
+        id: ${output.cardControls.ecommerceActive}
+    commands:
+      - tapOn:
+          label: Tap on Ecommerce option to inactive from active
+          id: ${output.cardControls.ecommerceActive}
+
+      - tapOn:
+          label: Tap on save button to save changes
+          id: ${output.cardControls.saveButton}
+
+      - assertVisible:
+          label: Verify Ecommerce option is now inactive
+          id: ${output.cardControls.ecommerceInactive}
+
+# Verify Ecommerce option is visible in INACTIVE state
+- assertVisible:
+    label: Verify Ecommerce option is visible in INACTIVE state
+    id: ${output.cardControls.ecommerceInactive}
+
+# Toggle to active state to make ACTIVE card available for E-commerce
+- tapOn:
+    label: Tap on Ecommerce option to activate
+    id: ${output.cardControls.ecommerceInactive}
+
+# Verify Save button visible on top right corner
+- assertVisible:
+    label: State change Save button visible
+    id: ${output.cardControls.saveButton}
+
+# Tap to save changes to enable make active for E-commerce
+- tapOn:
+    label: Tap on save button to save changes
+    id: ${output.cardControls.saveButton}
+
+# Verify Ecommerce option is now active
+- assertVisible:
+    label: Verify Ecommerce option is now active
+    id: ${output.cardControls.ecommerceActive}
+
+# Verify Successful message appear
+- assertVisible:
+    label: Verify Ecommerce option is now active
+    text: "(?i)Your card controls have been updated successfully"
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android E-commerce available for Physical card screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: PhysicalCardActivateEcommerceAndroid
+
+- runFlow:
+    label: Take iOS success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: PhysicalCardActivateEcommerceIOS

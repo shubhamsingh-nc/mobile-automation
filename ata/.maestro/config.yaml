@@ -1,5 +1,18 @@
 flows:
   - 'auth/**/*.yaml'
+  - 'cards/**/*.yaml'
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - "LoginSuccess"
+    - "LoginFailureInvalidOTP"
+    - "SetPasscodePolicyViolationError"
+    - "ForgotPasscodeSuccess"
+    - "FreezeUnFreezeVirtualCardSuccess"
+    - "ShowVirtualCardDetailsSuccess"
+    - "HideVirtualCardDetailsSuccess"
+    - "VirtualCardActivateEcommerce"
+    - "VirtualCardDailyLimitSuccess"
 
 # Test Output Configuration
 # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory

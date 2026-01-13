@@ -1,0 +1,202 @@
+appId: com.placeholder.id
+
+env:
+  PASSCODE: "888555"
+
+tags:
+  - cards
+  - card_limit
+  - virtual_card
+
+---
+- runFlow:
+    label: Load element definitions for cards
+    commands:
+      - runScript:
+          file: ../../elements/cards.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508655686"
+      PASSCODE: "888555"
+
+- assertVisible:
+    label: Verify on My Card visible on Home screen
+    id: ${output.cards.homeCardTile}
+
+# Tap on My Card tile to navigate to My Card screen
+- tapOn:
+    label: Tap on card tile
+    id: ${output.cards.homeCardTile}
+
+# Verify Virtual Card visible
+- assertNotVisible:
+    label: Verify Virtual Card visible
+    id: ${output.cards.cardChipAndNFC}
+
+# Verifying card is not INACTIVE state
+- assertVisible:
+    label: Verifying card is not INACTIVE state
+    id: ${output.cards.cardStatePresent}
+
+# Verify Card limit options visible
+- assertVisible:
+    label: Verify Card limit option visible
+    id: ${output.cards.limitsButton}
+
+# Tap on Card limit button to navigate to Transaction limits screen
+- tapOn:
+    label: Tap on Card limit option
+    id: ${output.cards.limitsButton}
+
+# Verify Transaction limits controls screen visible by checking Transaction limits page title
+- assertVisible:
+    label: Verify Transactions limit screen visible
+    id: ${output.cardTransactionLimits.transactionLimitTitle}
+
+# Verify Ecommerce transaction limit option visible
+- assertVisible:
+    label: Verify Ecommerce transaction limit option visible
+    id: ${output.cardTransactionLimits.ecommerceTransactionLimit}
+
+# Tap on Ecommerce transaction limit option
+- tapOn:
+    label: Tap on Ecommerce transaction limit option
+    id: ${output.cardTransactionLimits.ecommerceTransactionLimit}
+
+# Verify E-commerce Yearly limit option visible
+- assertVisible:
+    label: Verify Yearly limit option visible
+    id: ${output.cardTransactionLimits.yearlyLimit}
+
+# Verify update limit option visible
+- assertVisible:
+    label: Verify update limit option visible
+    id: ${output.cardTransactionLimits.yearlyUpdateLimitIcon}
+
+# Tap on update limit option
+- tapOn:
+    label: Tap on update limit option
+    id: ${output.cardTransactionLimits.yearlyUpdateLimitIcon}
+
+
+# Verify update limit option visible
+- assertVisible:
+    label: Verify update limit sheet visible
+    id: ${output.cardTransactionLimits.updateLimitSheet}
+
+# Verify current limit value visible
+- assertVisible:
+    label: Verify current limit value visible
+    id: ${output.cardTransactionLimits.currentLimitValue}
+
+
+# Verify save limit option visible
+- assertVisible:
+    label: Verify save limit value visible
+    id: ${output.cardTransactionLimits.saveLimit}
+
+# Verify decrease limit option visible
+- assertVisible:
+    label: Verify decrease limit button visible
+    id: ${output.cardTransactionLimits.decreaseLimit}
+
+# Verify increase limit option visible
+- assertVisible:
+    label: Verify increase limit button visible
+    id: ${output.cardTransactionLimits.increaseLimit}
+
+- copyTextFrom:
+    id: ${output.cardTransactionLimits.allowedLimit}
+- evalScript: ${output.allowedLimit = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+- copyTextFrom:
+    id: ${output.cardTransactionLimits.currentLimitValue}
+- evalScript: ${output.oldValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+- evalScript: ${
+    const current = output.oldValue;
+    const allowed = output.allowedLimit;
+    const minLimit = 0;
+
+    if (current >= allowed) {
+    output.action = "DECREASE";
+    }
+    
+    else if (current <= 1) {
+    output.action = "INCREASE";
+    }
+
+    else {
+    output.action = "DECREASE";
+    }}
+
+- runFlow:
+    when:
+      true: ${output.action === "DECREASE"}
+    commands:
+      - tapOn:
+          id: ${output.cardTransactionLimits.decreaseLimit}
+
+- runFlow:
+    when:
+      true: ${output.action === "INCREASE"}
+    commands:
+      - tapOn:
+          id: ${output.cardTransactionLimits.increaseLimit}
+
+- copyTextFrom:
+    id: ${output.cardTransactionLimits.currentLimitValue}
+- evalScript: ${output.newValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+- runFlow:
+    when:
+      true: ${output.newValue !== output.oldValue}
+    commands:
+      - tapOn:
+          id: ${output.cardTransactionLimits.saveLimit}
+
+- assertVisible:
+    label: Verify Passcode screen is visible
+    id: ${output.login.codeField}
+
+
+# Tap on passcode first field
+- tapOn:
+    label: Tap on passcode first field
+    id: ${output.login.codeField}
+
+
+# Enter Passcode into code field
+- inputText:
+    label: Enter valid passcode
+    text: ${PASSCODE}
+
+- hideKeyboard:
+    label: Hide keyboard after passcode entry
+
+- tapOn:
+    id: ${output.login.continueButton}
+
+
+- assertVisible:
+    label: Limit updated success screen visible
+    id: ${output.cardTransactionLimits.limitUpdateSuccess}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android limit update success screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: VirtualCardYearlyLimitUpdatedSuccessAndroid
+
+- runFlow:
+    label: Take iOS limit update success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: VirtualCardYearlyLimitUpdatedSuccessIOS
+

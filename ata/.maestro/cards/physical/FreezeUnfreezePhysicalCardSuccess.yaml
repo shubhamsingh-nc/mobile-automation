@@ -3,7 +3,7 @@ appId: com.placeholder.id
 tags:
   - cards
   - success
-  - virtual_card
+  - physical_card
 ---
 - runFlow:
     label: Load element definitions for cards
@@ -15,8 +15,8 @@ tags:
 - runFlow:
     file: ../../auth/login/LoginSuccess.yaml
     env:
-      PHONE: "508655686"
-      PASSCODE: "888555"
+      PHONE: '505050525'
+      PASSCODE: '123567'
 
 - assertVisible:
     label: Verify on My Card visible on Home screen
@@ -26,7 +26,6 @@ tags:
 - tapOn:
     label: Tap on card tile
     id: ${output.cards.homeCardTile}
-
 
 # Unfreeze card NORMALIZE STATE → Ensure card is UNFROZEN
 - runFlow:
@@ -45,7 +44,7 @@ tags:
         # Enter Passcode into code field
       - inputText:
           label: Enter valid passcode
-          text: '888555'
+          text: '123567'
 
       - hideKeyboard:
           label: Hide keyboard after passcode entry
@@ -60,9 +59,9 @@ tags:
           label: Tap on continue button to complete authentication for showing card details
           id: ${output.login.continueButton}
 
-# Assert card is Virtual card
-- assertNotVisible:
-    label: Verify Virtual Card visible
+# Assert card is Physical card
+- assertVisible:
+    label: Verify Physical Card visible
     id: ${output.cards.cardChipAndNFC}
 
 # Checking if card is ACTIVE
@@ -88,7 +87,7 @@ tags:
 # Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
-    text: '888555'
+    text: '123567'
 
 - hideKeyboard:
     label: Hide keyboard after passcode entry
@@ -124,15 +123,14 @@ tags:
     when:
       platform: android
     commands:
-      - takeScreenshot: FreezeVirtualCardAndroid
+      - takeScreenshot: FreezePhysicalCardAndroid
 
 - runFlow:
     label: Take iOS Freeze card screenshot
     when:
       platform: ios
     commands:
-      - takeScreenshot: FreezeVirtualCardDetailIOS
-
+      - takeScreenshot: FreezePhysicalCardDetailIOS
 
 - assertVisible:
     label: Verify Unfreeze Card option button visible
@@ -145,21 +143,21 @@ tags:
 
 # Tap on passcode first field
 - tapOn:
-      label: Tap on passcode first field
-      id: ${output.login.codeField}
+    label: Tap on passcode first field
+    id: ${output.login.codeField}
 
 # Enter Passcode into code field
 - inputText:
-      label: Enter valid passcode
-      text: '888555'
+    label: Enter valid passcode
+    text: '123567'
 
 - hideKeyboard:
-      label: Hide keyboard after passcode entry
+    label: Hide keyboard after passcode entry
 
 - assertVisible:
-      label: Verify continue button is enabled with valid passcode
-      id: ${output.login.continueButton}
-      enabled: true
+    label: Verify continue button is enabled with valid passcode
+    id: ${output.login.continueButton}
+    enabled: true
 
 # Tap on continue button to complete verification for show card details
 - tapOn:
@@ -187,11 +185,11 @@ tags:
     when:
       platform: android
     commands:
-      - takeScreenshot: UnfreezeVirtualCardAndroid
+      - takeScreenshot: UnfreezePhysicalCardAndroid
 
 - runFlow:
     label: Take iOS Unfreeze card screenshot
     when:
       platform: ios
     commands:
-      - takeScreenshot: UnfreezeVirtualCardDetailIOS
+      - takeScreenshot: UnfreezePhysicalCardDetailIOS

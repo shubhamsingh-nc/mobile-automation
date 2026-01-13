@@ -12,7 +12,11 @@ tags:
           file: ../../elements/cards.js
 
 # Run login flow from "LoginSuccess.yaml"
-- runFlow: ../../auth/login/LoginSuccess.yaml
+- runFlow:
+    file: ../../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508655686"
+      PASSCODE: "888555"
 
 - assertVisible:
     label: Verify on My Card visible on Home screen

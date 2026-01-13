@@ -7,7 +7,7 @@ tags:
 #Load target app id from POM
 - runFlow:
     label: Setting target platform app id
-    commands: 
+    commands:
       - runScript:
           file: ../../elements/targetApp.js
 # Load element definitions from POM
@@ -105,11 +105,11 @@ tags:
 
 - tapOn:
     label: Tap secondary button to complete onboarding
-    id: ${output.login.secondaryButton}    
+    id: ${output.login.secondaryButton}
 
 # Check for error notification
 - assertVisible:
-    text: "(?i)Invalid username or password"
+    text: 'Invalid username or password'
 
 # Capture platform-specific screenshots
 - runFlow:

@@ -7,6 +7,7 @@ output.cards = {
     cardStatePresent: 'card_details_present',
     cardChipAndNFC: 'card_chip_and_nfc',
 
+    physicalCardOnItsWay: 'physical_card_on_its_way_banner',
     showDetailsButton: 'show_details',
     hideDetailsButton: 'hide_details',
     freezeCardButton: 'freeze_card',
@@ -54,4 +55,28 @@ output.cardTransactionLimits = {
     ecommerceTransactionLimit: 'ecommerce_transaction_limit',
     ecommerceAndPosTransactionLimit: 'ecommerce_and_pos_transaction_limits',
     atmWithdrawlTransactionLimit: 'atm_withdrawl_limit',
+
+    dailyLimit: 'daily_limit',
+    monthLimit: 'monthly_limit',
+    yearlyLimit: 'yearly_limit',
+
+    dailyUpdateLimitIcon: 'daily_update_limit_icon',
+    monthlyUpdateLimitIcon: 'monthly_update_limit_icon',
+    yearlyUpdateLimitIcon: 'yearly_update_limit_icon',
+
+
+    allowedLimit: 'allowed_limit',
+    updateLimitSheet: 'limit_update_sheet',
+    currentLimitValue: 'current_limit_value',
+    decreaseLimit: 'decrease_limit',
+    increaseLimit: 'increase_limit',
+    saveLimit: 'save_limit',
+    limitUpdateSuccess: 'limit_updated_successfully',
+    limitUpdateSuccessButton: 'limit_update_success_button'
+
+}
+
+output.cardManagePin = {
+  showCardPINTitle: 'show_card_pin_title',
+  showCardPINView: 'showCardPINView'
 }

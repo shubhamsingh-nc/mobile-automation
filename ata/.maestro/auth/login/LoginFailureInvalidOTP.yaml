@@ -61,7 +61,7 @@ tags:
 
 - inputText:
     label: Enter valid phone number
-    text: '502562503'
+    text: '508635393'
 
 - assertVisible:
     label: Verify login button is now enabled

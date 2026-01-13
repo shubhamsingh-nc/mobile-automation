@@ -1,0 +1,50 @@
+appId: com.placeholder.id
+
+tags:
+  - cards
+  - success
+  - physical_cards
+
+---
+# Run flow from "LoginSuccess.yaml+ShowPysicalCardDetailsSuccess.yaml combined"
+- runFlow: ../../cards/physical/ShowPhysicalCardDetailsSuccess.yaml
+
+# Tap on Hide details button to hide card details
+- tapOn:
+    label: Tap on Hide details button to hide card details
+    id: ${output.cards.hideDetailsButton}
+
+# Verify if Card number hidden
+- assertVisible:
+    label: Verify Card number hidden again
+    id: ${output.cards.cardNumberHidden}
+
+# Verify if Card Expiry visible
+- assertVisible:
+    label: Verify Card expiry hidden again
+    id: ${output.cards.cardExpiryHidden}
+
+# Verify if CVV visible
+- assertVisible:
+    label: Verify CVV hidden again
+    id: ${output.cards.cvvHidden}
+
+# Verify if Hide details button changed to Show details button again
+- assertVisible:
+    label: Verify Hide details option button changed to Show details again
+    id: ${output.cards.showDetailsButton}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android Hide Card details screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: HidePhysicalCardDetailsAndroid
+
+- runFlow:
+    label: Take iOS Hide Card details screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: HidePhysicalCardDetailIOS

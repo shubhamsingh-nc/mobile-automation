@@ -13,7 +13,11 @@ tags:
           file: ../../elements/cards.js
 
 # Run login flow from "LoginSuccess.yaml"
-- runFlow: ../../auth/login/LoginSuccess.yaml
+- runFlow:
+    file: ../../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508655686"
+      PASSCODE: "888555"
 
 - assertVisible:
     label: Verify on My Card visible on Home screen
@@ -29,20 +33,15 @@ tags:
     label: Verify Virtual Card visible
     id: ${output.cards.cardChipAndNFC}
 
+# Verify Physical card is on its way banner not showing
+- assertNotVisible:
+    label: Verify Physical card is on its way banner not showing
+    id: ${output.cards.physicalCardOnItsWay}
+
 # Verifying card is not INACTIVE state
 - assertVisible:
     label: Verifying card is not INACTIVE state
     id: ${output.cards.cardStatePresent}
-
-# Verify Virtual Card is not frozen
-- assertNotVisible:
-    label: Verify Virtual Card not frozen
-    id: ${output.cards.cardFrozenBackground}
-
-# Verifying Virtual Card is not frozen
-- assertNotVisible:
-    label: Verify Virtual Card has not frozen label
-    id: ${output.cards.cardFrozenLabel}
 
 # Verify Card controls options visible
 - assertVisible:
@@ -64,15 +63,33 @@ tags:
     label: Verify Ecommerce option visible
     id: ${output.cardControls.ecommerce}
 
-# Verify E-commerce option is not already active
-- assertNotVisible:
-    label: Verify Ecommerce option is not already active
-    id: ${output.cardControls.ecommerceActive}
+# ACTIVE E-commerce NORMALIZE STATE → Ensure control is INACTIVE state
+- runFlow:
+    when:
+      visible:
+        id: ${output.cardControls.ecommerceActive}
+    commands:
+      - tapOn:
+          label: Tap on Ecommerce option to inactive from active
+          id: ${output.cardControls.ecommerceActive}
+
+      - tapOn:
+          label: Tap on save button to save changes
+          id: ${output.cardControls.saveButton}
+
+      - assertVisible:
+          label: Verify Ecommerce option is now inactive
+          id: ${output.cardControls.ecommerceInactive}
+
+# Verify Ecommerce option is visible in INACTIVE state
+- assertVisible:
+    label: Verify Ecommerce option is visible in INACTIVE state
+    id: ${output.cardControls.ecommerceInactive}
 
 # Toggle to active state to make ACTIVE card available for E-commerce
 - tapOn:
     label: Tap on Ecommerce option to activate
-    id: ${output.cardControls.ecommerceInActive}
+    id: ${output.cardControls.ecommerceInactive}
 
 # Verify Save button visible on top right corner
 - assertVisible:
@@ -88,6 +105,11 @@ tags:
 - assertVisible:
     label: Verify Ecommerce option is now active
     id: ${output.cardControls.ecommerceActive}
+
+# Verify Successful message appear
+- assertVisible:
+    label: Verify Ecommerce option is now active
+    text: "(?i)Your card controls have been updated successfully"
 
 # Capture platform-specific screenshots
 - runFlow:

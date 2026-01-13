@@ -172,14 +172,14 @@ tags:
     when:
       platform: android
     commands:
-    - inputText:
-        label: Enter invalid passcode
-        text: '387'
-      #Verify passcode policy violation error is visible
-    - assertVisible:
-        label: Verify passcode policy violation error is visible
-        id: ${output.forgotPasscode.passcodePolicyViolation}
-        enabled: true
+      - inputText:
+          label: Enter invalid passcode
+          text: '387'
+        #Verify passcode policy violation error is visible
+      - assertVisible:
+          label: Verify passcode policy violation error is visible
+          id: ${output.forgotPasscode.passcodePolicyViolation}
+          enabled: true
 
 # Capture platform-specific screenshots
 - runFlow:
@@ -233,13 +233,13 @@ tags:
 - evalScript: ${
     function sixDigitNoRepeat() {
     const digits = ['0','1','2','3','4','5','6','7','8','9'];
-    
+
     for (let i = digits.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const tmp = digits[i];
     digits[i] = digits[j];
     digits[j] = tmp;}
-    
+
     return digits.slice(0, 6).join('');}
 
     output.passcode = sixDigitNoRepeat()}
@@ -279,13 +279,13 @@ tags:
 - evalScript: ${
     function sixDigitNoRepeat() {
     const digits = ['0','1','2','3','4','5','6','7','8','9'];
-    
+
     for (let i = digits.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const tmp = digits[i];
     digits[i] = digits[j];
     digits[j] = tmp;}
-    
+
     return digits.slice(0, 6).join('');}
 
     output.passcode = sixDigitNoRepeat()}
@@ -299,7 +299,6 @@ tags:
 - tapOn:
     label: Tap on continue button to proceed to confirm passcode flow
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
-
 
 #Verify passcode mismatch error is visible
 - assertVisible:
