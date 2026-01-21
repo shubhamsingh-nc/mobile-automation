@@ -112,12 +112,16 @@ tags:
 - copyTextFrom:
     label: Copy allowed limit value
     id: ${output.cardTransactionLimits.allowedLimit}
+
+# Storing the allowed limit in variable by convert it to a numeric value
 - evalScript: ${output.allowedLimit = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # Verify current limit visible
 - copyTextFrom:
     label: Copy current set value
     id: ${output.cardTransactionLimits.currentLimitValue}
+
+# Storing the current limit in variable by convert it to a numeric value
 - evalScript: ${output.oldValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # Decide whether we should increase or decrease the limit based on current vs allowed values
@@ -160,6 +164,8 @@ tags:
 - copyTextFrom:
     label: Copy new set limit value
     id: ${output.cardTransactionLimits.currentLimitValue}
+
+# Storing the new limit in variable by convert it to a numeric value
 - evalScript: ${output.newValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # Run flow when limit changed

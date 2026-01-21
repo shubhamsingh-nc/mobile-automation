@@ -108,14 +108,20 @@ tags:
     label: Verify increase limit button visible
     id: ${output.cardTransactionLimits.increaseLimit}
 
-# Read the maximum allowed monthly limit from the UI and convert it to a numeric value
+# Read the maximum allowed monthly limit from the UI
 - copyTextFrom:
+    label: Copy allowed limit value
     id: ${output.cardTransactionLimits.allowedLimit}
+
+# Storing the allowed limit in variable by convert it to a numeric value
 - evalScript: ${output.allowedLimit = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # Read the current monthly limit value from the UI and holding them in variable
 - copyTextFrom:
+    label: Copy current limit value
     id: ${output.cardTransactionLimits.currentLimitValue}
+
+# Storing the old limit in variable by convert it to a numeric value
 - evalScript: ${output.oldValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # Decide whether to increase or decrease the monthly limit based on current vs allowed values
@@ -152,9 +158,12 @@ tags:
       - tapOn:
           id: ${output.cardTransactionLimits.increaseLimit}
 
-# Read the updated monthly limit value from the UI and holding it in a variable
+# Read the updated monthly limit value from the UI
 - copyTextFrom:
+    label: Copy new limit value
     id: ${output.cardTransactionLimits.currentLimitValue}
+
+# Assigning the current monthly limit value to a variable
 - evalScript: ${output.newValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
 # If the new monthly limit value is different from the old one, save the updated limit
