@@ -1,4 +1,4 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - auth
@@ -6,6 +6,7 @@ tags:
   - forgotpasscode
   - setpasscode
 ---
+# Setting target platform app id and Load element definitions
 - runFlow:
     label: Setting target platform app id and Load element definitions
     commands:
@@ -56,13 +57,16 @@ tags:
     label: Tap on phone number input field
     id: ${output.login.phoneNumberInput}
 
+# Scroll to see full login form
 - scroll:
     label: Scroll to see full login form
 
+# Enter valid phone number
 - inputText:
     label: Enter valid phone number
-    text: '508635393'
+    text: "508635393"
 
+# Verify login button is now enabled
 - assertVisible:
     label: Verify login button is now enabled
     id: ${output.login.loginButton}
@@ -73,6 +77,7 @@ tags:
     label: Tap login button to request OTP
     id: ${output.login.loginButton}
 
+# Verify OTP code field appears
 - assertVisible:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
@@ -82,9 +87,10 @@ tags:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
+# Enter valid OTP code
 - inputText:
     label: Enter valid OTP code
-    text: '0000'
+    text: "0000"
 
 # Check if navigate to passcode screen
 - assertVisible:
@@ -106,9 +112,10 @@ tags:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
+# Enter valid OTP code
 - inputText:
     label: Enter valid OTP code
-    text: '0000'
+    text: "0000"
 
 # Mobile number verified screen appears
 - assertVisible:
@@ -133,7 +140,7 @@ tags:
 # Enter email otp code
 - inputText:
     label: Enter valid email OTP code
-    text: '0000'
+    text: "0000"
 
 # Email address verified screen appears
 - assertVisible:
@@ -174,7 +181,7 @@ tags:
     commands:
       - inputText:
           label: Enter invalid passcode
-          text: '387'
+          text: "387"
         #Verify passcode policy violation error is visible
       - assertVisible:
           label: Verify passcode policy violation error is visible
@@ -195,7 +202,7 @@ tags:
 # Enter repetitive digits in passcode
 - inputText:
     label: Enter repetitive digits in passcode
-    text: '777777'
+    text: "777777"
 
 #Verify passcode policy violation error is visible
 - assertVisible:
@@ -218,6 +225,7 @@ tags:
     commands:
       - takeScreenshot: PasscodeRepetitionPolicyViolationErrorIOS
 
+# Step for iOS only, Setting cursor position to end of input field for iOS
 - runFlow:
     label: Setting cursor position to end of input field for iOS
     when:
@@ -226,6 +234,7 @@ tags:
       - tapOn:
           label: Tap on passcode field
           id: ${output.login.codeField}
+
 # Clear input field
 - eraseText
 

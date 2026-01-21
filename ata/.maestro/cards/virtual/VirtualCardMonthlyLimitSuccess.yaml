@@ -1,4 +1,4 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 env:
   PASSCODE: "888555"
@@ -9,6 +9,7 @@ tags:
   - virtual_card
 
 ---
+# Load element definitions for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -81,7 +82,6 @@ tags:
     label: Tap on update limit option
     id: ${output.cardTransactionLimits.monthlyUpdateLimitIcon}
 
-
 # Verify update limit option visible
 - assertVisible:
     label: Verify update limit sheet visible
@@ -91,7 +91,6 @@ tags:
 - assertVisible:
     label: Verify current limit value visible
     id: ${output.cardTransactionLimits.currentLimitValue}
-
 
 # Verify save limit option visible
 - assertVisible:
@@ -108,31 +107,35 @@ tags:
     label: Verify increase limit button visible
     id: ${output.cardTransactionLimits.increaseLimit}
 
+# Read the maximum allowed monthly limit from the UI and convert it to a numeric value
 - copyTextFrom:
     id: ${output.cardTransactionLimits.allowedLimit}
 - evalScript: ${output.allowedLimit = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
+# Read the current monthly limit value from the UI and holding them in variable
 - copyTextFrom:
     id: ${output.cardTransactionLimits.currentLimitValue}
 - evalScript: ${output.oldValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
+# Decide whether to increase or decrease the monthly limit based on current vs allowed values
 - evalScript: ${
     const current = output.oldValue;
     const allowed = output.allowedLimit;
-    const minLimit = 0;
+    const minLimit = 10000;
 
     if (current >= allowed) {
-    output.action = "DECREASE";
+        output.action = "DECREASE";
     }
-    
-    else if (current <= 1) {
-    output.action = "INCREASE";
+
+    else if (current <= minLimit) {
+        output.action = "INCREASE";
     }
 
     else {
-    output.action = "DECREASE";
+        output.action = "DECREASE";
     }}
 
+# If we decided to decrease the monthly limit, tap on the decrease button
 - runFlow:
     when:
       true: ${output.action === "DECREASE"}
@@ -140,6 +143,7 @@ tags:
       - tapOn:
           id: ${output.cardTransactionLimits.decreaseLimit}
 
+# If we decided to increase the monthly limit, tap on the increase button
 - runFlow:
     when:
       true: ${output.action === "INCREASE"}
@@ -147,10 +151,12 @@ tags:
       - tapOn:
           id: ${output.cardTransactionLimits.increaseLimit}
 
+# Read the updated monthly limit value from the UI and holding it in a variable
 - copyTextFrom:
     id: ${output.cardTransactionLimits.currentLimitValue}
 - evalScript: ${output.newValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
+# If the new monthly limit value is different from the old one, save the updated limit
 - runFlow:
     when:
       true: ${output.newValue !== output.oldValue}
@@ -158,29 +164,31 @@ tags:
       - tapOn:
           id: ${output.cardTransactionLimits.saveLimit}
 
+# Verify that the passcode verification screen is displayed
 - assertVisible:
     label: Verify Passcode screen is visible
     id: ${output.login.codeField}
-
 
 # Tap on passcode first field
 - tapOn:
     label: Tap on passcode first field
     id: ${output.login.codeField}
 
-
 # Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
     text: ${PASSCODE}
 
+# Hide hideKeyboard:
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Confirm passcode submission by tapping on Continue button
 - tapOn:
+    label: Tap on Continue button
     id: ${output.login.continueButton}
 
-
+# Verify that the monthly limit update success confirmation is displayed
 - assertVisible:
     label: Limit updated success screen visible
     id: ${output.cardTransactionLimits.limitUpdateSuccess}
@@ -199,4 +207,3 @@ tags:
       platform: ios
     commands:
       - takeScreenshot: VirtualCardMonthlyLimitUpdatedSuccessIOS
-

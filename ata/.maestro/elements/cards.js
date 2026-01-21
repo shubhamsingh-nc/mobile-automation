@@ -2,81 +2,64 @@
 // Contains all element IDs and selectors used in cards flows
 
 output.cards = {
-    homeCardTile: 'my_card_tile',
-    cardStateEmpty: 'card_details_empty',
-    cardStatePresent: 'card_details_present',
-    cardChipAndNFC: 'card_chip_and_nfc',
-
-    physicalCardOnItsWay: 'physical_card_on_its_way_banner',
-    showDetailsButton: 'show_details',
-    hideDetailsButton: 'hide_details',
-    freezeCardButton: 'freeze_card',
-    unfreezeCardButton: 'unfreeze_card',
-    cardControlsButton: 'card_controls',
-    limitsButton: 'limits',
-    managePinButton: 'manage_pin',
-    replaceCardButton: 'replace_card',
-
-    copyCard: 'copy_card_number',
-    cardNumberVisible: 'card_number_visible',
-    cardNumberHidden: 'card_number_hidden',
-    cardExpiryVisible: 'card_expiry_visible',
-    cardExpiryHidden: 'card_expiry_hidden',
-    cvvVisible: 'cvv_visible',
-    cvvHidden: 'cvv_hidden',
-
-    cardFrozenBackground: 'frozen_card_background',
-    cardFrozenLabel: 'frozen_card_label'
-}
+  homeCardTile: "my_card_tile",
+  cardStateEmpty: "card_details_empty",
+  cardStatePresent: "card_details_present",
+  cardChipAndNFC: "card_chip_and_nfc",
+  physicalCardOnItsWay: "physical_card_on_its_way_banner",
+  showDetailsButton: "show_details",
+  hideDetailsButton: "hide_details",
+  freezeCardButton: "freeze_card",
+  unfreezeCardButton: "unfreeze_card",
+  cardControlsButton: "card_controls",
+  limitsButton: "limits",
+  managePinButton: "manage_pin",
+  replaceCardButton: "replace_card",
+  copyCard: "copy_card_number",
+  cardNumberVisible: "card_number_visible",
+  cardNumberHidden: "card_number_hidden",
+  cardExpiryVisible: "card_expiry_visible",
+  cardExpiryHidden: "card_expiry_hidden",
+  cvvVisible: "cvv_visible",
+  cvvHidden: "cvv_hidden",
+  cardFrozenBackground: "frozen_card_background",
+  cardFrozenLabel: "frozen_card_label",
+};
 
 output.cardControls = {
-    cardControlsTitle: 'card_controls_title',
-
-    saveButton: 'save_button',
-
-    ecommerce: 'ecommerce',
-    pos: 'pos',
-    atmWithdrawl: 'atm_withdrawl',
-    rewardPlatform: 'reward_platform',
-
-    ecommerceInactive: 'ecommerce_inactive',
-    posInactive: 'pos_inactive',
-    atmWithdrawlInactive: 'atm_withdrawl_inactive',
-    rewardPlatformInactive: 'reward_platform_inactive',
-
-    ecommerceActive: 'ecommerce_active',
-    posActive: 'pos_active',
-    atmWithdrawlActive: 'atm_withdrawl_active',
-    rewardPlatformActive: 'reward_platform_active'
-}
+  cardControlsTitle: "card_controls_title",
+  saveButton: "save_button",
+  ecommerce: "ecommerce",
+  pos: "pos",
+  atmWithdrawl: "atm_withdrawl",
+  rewardPlatform: "reward_platform",
+  ecommerceInactive: "ecommerce_inactive",
+  posInactive: "pos_inactive",
+  atmWithdrawlInactive: "atm_withdrawl_inactive",
+  rewardPlatformInactive: "reward_platform_inactive",
+  ecommerceActive: "ecommerce_active",
+  posActive: "pos_active",
+  atmWithdrawlActive: "atm_withdrawl_active",
+  rewardPlatformActive: "reward_platform_active",
+};
 
 output.cardTransactionLimits = {
-    transactionLimitTitle: 'transaction_limits_title',
-    ecommerceTransactionLimit: 'ecommerce_transaction_limit',
-    ecommerceAndPosTransactionLimit: 'ecommerce_and_pos_transaction_limits',
-    atmWithdrawlTransactionLimit: 'atm_withdrawl_limit',
-
-    dailyLimit: 'daily_limit',
-    monthLimit: 'monthly_limit',
-    yearlyLimit: 'yearly_limit',
-
-    dailyUpdateLimitIcon: 'daily_update_limit_icon',
-    monthlyUpdateLimitIcon: 'monthly_update_limit_icon',
-    yearlyUpdateLimitIcon: 'yearly_update_limit_icon',
-
-
-    allowedLimit: 'allowed_limit',
-    updateLimitSheet: 'limit_update_sheet',
-    currentLimitValue: 'current_limit_value',
-    decreaseLimit: 'decrease_limit',
-    increaseLimit: 'increase_limit',
-    saveLimit: 'save_limit',
-    limitUpdateSuccess: 'limit_updated_successfully',
-    limitUpdateSuccessButton: 'limit_update_success_button'
-
-}
-
-output.cardManagePin = {
-  showCardPINTitle: 'show_card_pin_title',
-  showCardPINView: 'showCardPINView'
-}
+  transactionLimitTitle: "transaction_limits_title",
+  ecommerceTransactionLimit: "ecommerce_transaction_limit",
+  ecommerceAndPosTransactionLimit: "ecommerce_and_pos_transaction_limits",
+  atmWithdrawlTransactionLimit: "atm_withdrawl_limit",
+  dailyLimit: "daily_limit",
+  monthLimit: "monthly_limit",
+  yearlyLimit: "yearly_limit",
+  dailyUpdateLimitIcon: "daily_update_limit_icon",
+  monthlyUpdateLimitIcon: "monthly_update_limit_icon",
+  yearlyUpdateLimitIcon: "yearly_update_limit_icon",
+  allowedLimit: "allowed_limit",
+  updateLimitSheet: "limit_update_sheet",
+  currentLimitValue: "current_limit_value",
+  decreaseLimit: "decrease_limit",
+  increaseLimit: "increase_limit",
+  saveLimit: "save_limit",
+  limitUpdateSuccess: "limit_updated_successfully",
+  limitUpdateSuccessButton: "limit_update_success_button",
+};

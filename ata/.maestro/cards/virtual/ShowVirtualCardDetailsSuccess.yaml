@@ -1,106 +1,111 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
   - success
   - virtual_card
 ---
+# Load element definition for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
       - runScript:
+          # Load element mapping for the cards module
           file: ../../elements/cards.js
 
-# Run login flow from "LoginSuccess.yaml"
+# Perform standard login
 - runFlow:
     file: ../../auth/login/LoginSuccess.yaml
     env:
       PHONE: "508655686"
       PASSCODE: "888555"
 
+# Check for the card tile on the Home screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
+# Tap the card tile to enter the card details page
 - tapOn:
-    label: Tap on card tile
+    label: Tap on card tile to navigate to My Card screen
     id: ${output.cards.homeCardTile}
 
-# Assert card is Virtual card
+# Assert that no physical card elements are showing (confirming virtual card)
 - assertNotVisible:
     label: Verify Virtual Card visible
     id: ${output.cards.cardChipAndNFC}
 
-# Checking if card is ACTIVE
+# Verify that the card is in an active state
 - assertVisible:
     label: Verify Card details not blank
     id: ${output.cards.cardStatePresent}
 
-# Verify if Show card details button visible
+# Confirm "Show details" button is present
 - assertVisible:
     label: Verify Show Card details option button visible
     id: ${output.cards.showDetailsButton}
 
-# Tap on Show card details button to proceed for passcode verification
+# Tap on "Show details" to start authentication
 - tapOn:
     label: Tap on Show Card details option button
     id: ${output.cards.showDetailsButton}
 
-# Tap on passcode first field
+# Tap the passcode input area
 - tapOn:
     label: Tap on passcode first field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
+# Enter the correct passcode
 - inputText:
     label: Enter valid passcode
-    text: '888555'
+    text: "888555"
 
+# Hide the keyboard to reveal the continue button
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Ensure the continue button is active
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap on continue button to complete verification for show card details
+# Tap continue to view the card details
 - tapOn:
     label: Tap on continue button to complete authentication for showing card details
     id: ${output.login.continueButton}
 
-# Verify if Card number visible
+# Verify the full card number is now displayed
 - assertVisible:
     label: Verify Card number visible
     id: ${output.cards.cardNumberVisible}
 
-# Verify if Card Expiry visible
+# Verify the expiry date is now displayed
 - assertVisible:
     label: Verify Card expiry visible
     id: ${output.cards.cardExpiryVisible}
 
-# Verify if CVV visible
+# Verify the CVV is now displayed
 - assertVisible:
     label: Verify CVV visible
     id: ${output.cards.cvvVisible}
 
-# Verify if Show details button changed to Hide details button
+# Confirm the button has toggled to "Hide details"
 - assertVisible:
     label: Verify Hide Card details option button visible
     id: ${output.cards.hideDetailsButton}
 
-# Copy Card number by tapping copy button
+# Check if the "Copy Card" option is available
 - assertVisible:
     label: Verify Copy Card number option button visible
     id: ${output.cards.copyCard}
 
-# Tap on Copy Card number
+# Tap on the Copy button to simulate card number copying
 - tapOn:
     label: Tap on Copy Card number option button
     id: ${output.cards.copyCard}
 
-# Capture platform-specific screenshots
+# Capture screenshots of the revealed card details
 - runFlow:
     label: Take Android Show Card details screenshot
     when:

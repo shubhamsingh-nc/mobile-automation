@@ -1,4 +1,4 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
@@ -6,6 +6,7 @@ tags:
   - virtual_card
 
 ---
+# Load element definition for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -19,6 +20,7 @@ tags:
       PHONE: "508655686"
       PASSCODE: "888555"
 
+# Verify My card visible on Home Screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
@@ -69,14 +71,17 @@ tags:
       visible:
         id: ${output.cardControls.ecommerceActive}
     commands:
+      # Tap on E-commerce option to inactivate from active state
       - tapOn:
           label: Tap on Ecommerce option to inactive from active
           id: ${output.cardControls.ecommerceActive}
 
+      # Tap on save button to save changes
       - tapOn:
           label: Tap on save button to save changes
           id: ${output.cardControls.saveButton}
 
+      # Verify E-commerce option is now inactive
       - assertVisible:
           label: Verify Ecommerce option is now inactive
           id: ${output.cardControls.ecommerceInactive}

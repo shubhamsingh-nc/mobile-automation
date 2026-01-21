@@ -1,4 +1,4 @@
-appId: com.placeholder.appid
+appId: com.nymcard.masaar
 tags:
   - auth
   - failure
@@ -46,6 +46,7 @@ tags:
     label: Verify phone number input is visible
     id: ${output.login.phoneNumberInput}
 
+# Verify login button is visible and disabled
 - assertVisible:
     label: Verify login button is visible and disabled
     id: ${output.login.loginButton}
@@ -56,13 +57,16 @@ tags:
     label: Tap on phone number input field
     id: ${output.login.phoneNumberInput}
 
+# Scroll to see full login form
 - scroll:
     label: Scroll to see full login form
 
+# Enter valid phone number
 - inputText:
     label: Enter valid phone number
-    text: '508635393'
+    text: "508635393"
 
+# Verify login button is now enabled
 - assertVisible:
     label: Verify login button is now enabled
     id: ${output.login.loginButton}
@@ -73,6 +77,7 @@ tags:
     label: Tap login button to request OTP
     id: ${output.login.loginButton}
 
+# Verify OTP code field appears
 - assertVisible:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
@@ -82,10 +87,12 @@ tags:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
+# Verify OTP input section is visible
 - assertVisible:
     label: Verify OTP input section is visible
     id: ${output.login.otpInputSection}
 
+# Verify error OTP section is not visible initially
 - assertNotVisible:
     label: Verify error OTP section is not visible initially
     id: ${output.login.errorOtpInputSection}
@@ -93,13 +100,14 @@ tags:
 # Enter invalid OTP code
 - inputText:
     label: Enter invalid OTP code to trigger error
-    text: '1919'
+    text: "1919"
 
 # Verify error state
 - assertNotVisible:
     label: Verify OTP input section is hidden after invalid entry
     id: ${output.login.otpInputSection}
 
+# Verify error OTP section is now visible
 - assertVisible:
     label: Verify error OTP section is now visible
     id: ${output.login.errorOtpInputSection}

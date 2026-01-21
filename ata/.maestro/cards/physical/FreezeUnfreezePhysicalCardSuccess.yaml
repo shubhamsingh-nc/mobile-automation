@@ -1,10 +1,11 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
   - success
   - physical_card
 ---
+# Load element definition for cards flow
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -15,9 +16,10 @@ tags:
 - runFlow:
     file: ../../auth/login/LoginSuccess.yaml
     env:
-      PHONE: '505050525'
-      PASSCODE: '123567'
+      PHONE: "505050525"
+      PASSCODE: "123567"
 
+# Verify My Card visible on Home screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
@@ -34,6 +36,7 @@ tags:
         id: ${output.cards.unfreezeCardButton}
     commands:
       - tapOn:
+          label: Tap on Unfreeze Card option button
           id: ${output.cards.unfreezeCardButton}
 
         # Tap on passcode first field
@@ -44,11 +47,13 @@ tags:
         # Enter Passcode into code field
       - inputText:
           label: Enter valid passcode
-          text: '123567'
+          text: "123567"
 
+      # Hide keyboard
       - hideKeyboard:
           label: Hide keyboard after passcode entry
 
+      # Verify continue button is enabled with valid passcode
       - assertVisible:
           label: Verify continue button is enabled with valid passcode
           id: ${output.login.continueButton}
@@ -87,11 +92,13 @@ tags:
 # Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
-    text: '123567'
+    text: "123567"
 
+# HideKeyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify continue button is enabled with valid passcode
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}
@@ -132,6 +139,7 @@ tags:
     commands:
       - takeScreenshot: FreezePhysicalCardDetailIOS
 
+# Verify if UnFreeze card button visible
 - assertVisible:
     label: Verify Unfreeze Card option button visible
     id: ${output.cards.unfreezeCardButton}
@@ -149,11 +157,13 @@ tags:
 # Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
-    text: '123567'
+    text: "123567"
 
+# Hide hideKeyboard:
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify continue button is enabled with valid passcode
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}

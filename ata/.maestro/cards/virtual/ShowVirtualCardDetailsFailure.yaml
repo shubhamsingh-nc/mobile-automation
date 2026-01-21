@@ -1,85 +1,91 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
   - failure
   - virtual_card
 ---
+# Load element definition for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
       - runScript:
+          # Load the external JavaScript file containing card element IDs
           file: ../../elements/cards.js
 
-# Run login flow from "LoginSuccess.yaml"
+# Execute the login flow with predefined credentials
 - runFlow:
     file: ../../auth/login/LoginSuccess.yaml
     env:
       PHONE: "508655686"
       PASSCODE: "888555"
 
+# Confirm the user is on the Home screen by checking the Card tile
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
+# Tap on the Card tile to navigate to the card management screen
 - tapOn:
-    label: Tap on card tile
+    label: Tap on card tile to navigate to My Card screen
     id: ${output.cards.homeCardTile}
 
-# Assert card is Virtual card
+# Ensure the card being viewed is a Virtual card (NFC/Chip icons should be absent)
 - assertNotVisible:
     label: Verify Virtual Card visible
     id: ${output.cards.cardChipAndNFC}
 
-# Checking if card is ACTIVE
+# Verify that the card state is active and details are present
 - assertVisible:
     label: Verify Card details not blank
     id: ${output.cards.cardStatePresent}
 
-# Verify if Show card details button visible
+# Check if the "Show details" button is available
 - assertVisible:
     label: Verify Show Card details option button visible
     id: ${output.cards.showDetailsButton}
 
-# Tap on Show card details button to proceed for passcode verification
+# Tap the button to initiate the sensitive data reveal process
 - tapOn:
     label: Tap on Show Card details option button
     id: ${output.cards.showDetailsButton}
 
-# Tap on passcode first field
+# Focus on the passcode input field
 - tapOn:
     label: Tap on passcode first field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
+# Input an incorrect passcode to trigger a failure
 - inputText:
     label: Enter an invalid passcode
-    text: '112233'
+    text: "112233"
 
+# Dismiss the system keyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify the continue button is enabled despite the wrong code (UI validation)
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap on continue button to complete verification for show card details
+# Tap the continue button to submit the invalid passcode
 - tapOn:
     label: Tap on continue button to complete authentication for showing card details
     id: ${output.login.continueButton}
 
-# Verify card details not visible
+# Confirm that the card number remains hidden due to the failure
 - assertNotVisible:
     label: Verify Card number not visible
     id: ${output.cards.cardNumberVisible}
 
-# Check for error notification
+# Check for the presence of an "Invalid passcode" error message
 - assertVisible:
+    label: Verify error message for invalid passcode
     text: "(?i)invalid passcode"
 
-# Capture platform-specific screenshots
+# Capture screenshots of the failure state
 - runFlow:
     label: Take Android Show Virtual Card details Invalid OTP failure screenshot
     when:

@@ -1,10 +1,11 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
   - success
   - physical_card
 ---
+# Load element definitions for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -18,6 +19,7 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
+# Verify on My Card visible on Home Screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
@@ -57,9 +59,11 @@ tags:
     label: Enter valid passcode
     text: "123567"
 
+# Hide hideKeyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify continue button is enabled with valid passcode
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}

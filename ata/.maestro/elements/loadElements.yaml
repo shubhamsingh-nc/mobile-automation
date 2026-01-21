@@ -1,5 +1,0 @@
-appId: com.nymcard.masaar.dev
----
-# Load element definitions for all flows
-- runScript: targetApp.js
-- runScript: login.js

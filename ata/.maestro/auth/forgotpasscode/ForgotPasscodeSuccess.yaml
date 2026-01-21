@@ -1,19 +1,20 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - auth
   - success
   - forgotpasscode
 ---
+# Setting target platform app id and Load element definitions
 - runFlow:
-     label: Setting target platform app id and Load element definitions
-     commands:
-       - runScript:
-           file: ../../elements/targetApp.js
-       - runScript:
-           file: ../../elements/login.js
-       - runScript:
-           file: ../../elements/forgot-passcode.js
+    label: Setting target platform app id and Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/targetApp.js
+      - runScript:
+          file: ../../elements/login.js
+      - runScript:
+          file: ../../elements/forgot-passcode.js
 
 # Initialize and launch application
 - launchApp:
@@ -41,8 +42,8 @@ tags:
 
 # Verify initial state of login screen
 - assertVisible:
-     label: Verify phone number input is visible
-     id: ${output.login.phoneNumberInput}
+    label: Verify phone number input is visible
+    id: ${output.login.phoneNumberInput}
 
 # Verify login button is visible and disabled
 - assertVisible:
@@ -55,13 +56,16 @@ tags:
     label: Tap on phone number input field
     id: ${output.login.phoneNumberInput}
 
+# Scroll to see full login form
 - scroll:
     label: Scroll to see full login form
 
+# Enter valid phone number
 - inputText:
     label: Enter valid phone number
-    text: '508635393'
+    text: "508635393"
 
+# Verify login button is now enabled
 - assertVisible:
     label: Verify login button is now enabled
     id: ${output.login.loginButton}
@@ -83,7 +87,7 @@ tags:
 
 - inputText:
     label: Enter valid OTP code
-    text: '0000'
+    text: "0000"
 
 # Check if navigate to passcode screen
 - assertVisible:
@@ -107,7 +111,7 @@ tags:
 
 - inputText:
     label: Enter valid OTP code
-    text: '0000'
+    text: "0000"
 
 # Mobile number verified screen appears
 - assertVisible:
@@ -132,7 +136,7 @@ tags:
 # Enter email otp code
 - inputText:
     label: Enter valid email OTP code
-    text: '0000'
+    text: "0000"
 
 # Email address verified screen appears
 - assertVisible:
@@ -164,13 +168,13 @@ tags:
 - evalScript: ${
     function sixDigitNoRepeat() {
     const digits = ['0','1','2','3','4','5','6','7','8','9'];
-    
+
     for (let i = digits.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const tmp = digits[i];
     digits[i] = digits[j];
     digits[j] = tmp;}
-    
+
     return digits.slice(0, 6).join('');}
 
     output.passcode = sixDigitNoRepeat()}
@@ -230,7 +234,7 @@ tags:
       platform: ios
     commands:
       - takeScreenshot: ConfirmPasscodeIOS
-        
+
 # Tap on continue button to proceed to confirm passcode flow
 - tapOn:
     label: Tap on continue button to proceed to confirm passcode flow
@@ -255,7 +259,3 @@ tags:
       platform: ios
     commands:
       - takeScreenshot: PasscodeUpdatedSuccessIOS
-
-
-
-

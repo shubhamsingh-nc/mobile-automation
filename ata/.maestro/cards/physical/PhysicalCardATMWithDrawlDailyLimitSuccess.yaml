@@ -1,4 +1,4 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 env:
   PASSCODE: "123567"
@@ -9,6 +9,7 @@ tags:
   - physical_card
 
 ---
+# Load element definition for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -22,6 +23,7 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
+# Verify My card visible on Home Screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
@@ -118,23 +120,25 @@ tags:
     id: ${output.cardTransactionLimits.currentLimitValue}
 - evalScript: ${output.oldValue = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
+# Decide whether we should increase or decrease the limit based on current vs allowed values
 - evalScript: ${
     const current = output.oldValue;
     const allowed = output.allowedLimit;
     const minLimit = 1000;
 
     if (current >= allowed) {
-    output.action = "DECREASE";
+        output.action = "DECREASE";
     }
 
-    else if (current <= 1000) {
-    output.action = "INCREASE";
+    else if (current <= minLimit) {
+        output.action = "INCREASE";
     }
 
     else {
-    output.action = "DECREASE";
+        output.action = "DECREASE";
     }}
 
+# Run flow when action should be decrease the limit
 - runFlow:
     when:
       true: ${output.action === "DECREASE"}
@@ -142,6 +146,7 @@ tags:
       - tapOn:
           id: ${output.cardTransactionLimits.decreaseLimit}
 
+# Run flow when action should be increase the limit
 - runFlow:
     when:
       true: ${output.action === "INCREASE"}
@@ -177,11 +182,13 @@ tags:
     label: Enter valid passcode
     text: ${PASSCODE}
 
+# Hide hideKeyboard:
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
 # Tap on continue button to complete verification for show card details
 - tapOn:
+    label: Tap on continue button to complete authentication for showing card details
     id: ${output.login.continueButton}
 
 # Verify Limit updated! success screen visible

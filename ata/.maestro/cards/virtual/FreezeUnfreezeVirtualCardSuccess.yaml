@@ -1,10 +1,11 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
   - success
   - virtual_card
 ---
+# Load element definition for cards flow
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -18,6 +19,7 @@ tags:
       PHONE: "508655686"
       PASSCODE: "888555"
 
+# Verify My card visible on Home Screen
 - assertVisible:
     label: Verify on My Card visible on Home screen
     id: ${output.cards.homeCardTile}
@@ -27,7 +29,6 @@ tags:
     label: Tap on card tile
     id: ${output.cards.homeCardTile}
 
-
 # Unfreeze card NORMALIZE STATE → Ensure card is UNFROZEN
 - runFlow:
     when:
@@ -35,6 +36,7 @@ tags:
         id: ${output.cards.unfreezeCardButton}
     commands:
       - tapOn:
+          label: Tap on Unfreeze Card option button
           id: ${output.cards.unfreezeCardButton}
 
         # Tap on passcode first field
@@ -45,17 +47,19 @@ tags:
         # Enter Passcode into code field
       - inputText:
           label: Enter valid passcode
-          text: '888555'
+          text: "888555"
 
+        # Hide keyboard
       - hideKeyboard:
           label: Hide keyboard after passcode entry
 
+      # Verify continue button is enabled with valid passcode
       - assertVisible:
           label: Verify continue button is enabled with valid passcode
           id: ${output.login.continueButton}
           enabled: true
 
-        # Tap on continue button to complete verification for show card details
+      # Tap on continue button to complete verification for show card details
       - tapOn:
           label: Tap on continue button to complete authentication for showing card details
           id: ${output.login.continueButton}
@@ -88,11 +92,13 @@ tags:
 # Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
-    text: '888555'
+    text: "888555"
 
+# Hide keyboard after entering passcode
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify continue button visible with valid passcode
 - assertVisible:
     label: Verify continue button is enabled with valid passcode
     id: ${output.login.continueButton}
@@ -133,7 +139,7 @@ tags:
     commands:
       - takeScreenshot: FreezeVirtualCardDetailIOS
 
-
+# Verify if UnFreeze card button visible
 - assertVisible:
     label: Verify Unfreeze Card option button visible
     id: ${output.cards.unfreezeCardButton}
@@ -145,21 +151,23 @@ tags:
 
 # Tap on passcode first field
 - tapOn:
-      label: Tap on passcode first field
-      id: ${output.login.codeField}
+    label: Tap on passcode first field
+    id: ${output.login.codeField}
 
 # Enter Passcode into code field
 - inputText:
-      label: Enter valid passcode
-      text: '888555'
+    label: Enter valid passcode
+    text: "888555"
 
+# Hide hideKeyboard:
 - hideKeyboard:
-      label: Hide keyboard after passcode entry
+    label: Hide keyboard after passcode entry
 
+# Verify continue button is enabled with valid passcode
 - assertVisible:
-      label: Verify continue button is enabled with valid passcode
-      id: ${output.login.continueButton}
-      enabled: true
+    label: Verify continue button is enabled with valid passcode
+    id: ${output.login.continueButton}
+    enabled: true
 
 # Tap on continue button to complete verification for show card details
 - tapOn:

@@ -1,4 +1,4 @@
-appId: com.placeholder.appid
+appId: com.nymcard.masaar
 
 env:
   PHONE: ${PHONE || "508655686"}

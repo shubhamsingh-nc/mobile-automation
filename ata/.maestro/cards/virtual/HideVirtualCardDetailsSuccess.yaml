@@ -1,4 +1,4 @@
-appId: com.placeholder.id
+appId: com.nymcard.masaar
 
 tags:
   - cards
@@ -6,35 +6,35 @@ tags:
   - virtual_cards
 
 ---
-# Run login flow from "LoginSuccess.yaml"
+# Execute the flow to show card details first
 - runFlow: ../../cards/virtual/ShowVirtualCardDetailsSuccess.yaml
 
-# Tap on Hide details button to hide card details
+# Tap on the Hide details button to conceal card information
 - tapOn:
     label: Tap on Hide details button to hide card details
     id: ${output.cards.hideDetailsButton}
 
-# Verify if Card number hidden
+# Verify that the card number is now masked or hidden
 - assertVisible:
     label: Verify Card number hidden again
     id: ${output.cards.cardNumberHidden}
 
-# Verify if Card Expiry visible
+# Verify that the card expiry date is hidden
 - assertVisible:
     label: Verify Card expiry hidden again
     id: ${output.cards.cardExpiryHidden}
 
-# Verify if CVV visible
+# Verify that the CVV is hidden
 - assertVisible:
     label: Verify CVV hidden again
     id: ${output.cards.cvvHidden}
 
-# Verify if Hide details button changed to Show details button again
+# Verify that the toggle button text has changed back to "Show details"
 - assertVisible:
     label: Verify Hide details option button changed to Show details again
     id: ${output.cards.showDetailsButton}
 
-# Capture platform-specific screenshots
+# Capture platform-specific screenshots for verification
 - runFlow:
     label: Take Android Hide Card details screenshot
     when:
