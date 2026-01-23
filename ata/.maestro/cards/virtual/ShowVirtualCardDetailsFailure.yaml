@@ -5,7 +5,7 @@ tags:
   - failure
   - virtual_card
 ---
-# Load element definition for cards
+# Load element definition POM for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -20,67 +20,54 @@ tags:
       PHONE: "508655686"
       PASSCODE: "888555"
 
-# Confirm the user is on the Home screen by checking the Card tile
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on the Card tile to navigate to the card management screen
 - tapOn:
-    label: Tap on card tile to navigate to My Card screen
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
-# Ensure the card being viewed is a Virtual card (NFC/Chip icons should be absent)
 - assertNotVisible:
-    label: Verify Virtual Card visible
+    label: Confirm card is virtual by checking chip/NFC not present
     id: ${output.cards.cardChipAndNFC}
 
-# Verify that the card state is active and details are present
 - assertVisible:
-    label: Verify Card details not blank
+    label: Verify card is active with details displayed
     id: ${output.cards.cardStatePresent}
 
-# Check if the "Show details" button is available
 - assertVisible:
-    label: Verify Show Card details option button visible
+    label: Verify Show Card details button visible
     id: ${output.cards.showDetailsButton}
 
-# Tap the button to initiate the sensitive data reveal process
 - tapOn:
-    label: Tap on Show Card details option button
+    label: Tap Show Card details button to reveal card information
     id: ${output.cards.showDetailsButton}
 
-# Focus on the passcode input field
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Input an incorrect passcode to trigger a failure
 - inputText:
-    label: Enter an invalid passcode
+    label: Enter invalid passcode to trigger failure
     text: "112233"
 
-# Dismiss the system keyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Verify the continue button is enabled despite the wrong code (UI validation)
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button enabled after passcode entry
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap the continue button to submit the invalid passcode
 - tapOn:
-    label: Tap on continue button to complete authentication for showing card details
+    label: Submit invalid passcode to trigger error
     id: ${output.login.continueButton}
 
-# Confirm that the card number remains hidden due to the failure
 - assertNotVisible:
-    label: Verify Card number not visible
+    label: Verify card number remains hidden after failed authentication
     id: ${output.cards.cardNumberVisible}
 
-# Check for the presence of an "Invalid passcode" error message
 - assertVisible:
     label: Verify error message for invalid passcode
     text: "(?i)invalid passcode"

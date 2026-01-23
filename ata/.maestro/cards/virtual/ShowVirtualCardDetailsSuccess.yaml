@@ -5,7 +5,7 @@ tags:
   - success
   - virtual_card
 ---
-# Load element definition for cards
+# Load element definition POM for cards
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -20,89 +20,72 @@ tags:
       PHONE: "508655686"
       PASSCODE: "888555"
 
-# Check for the card tile on the Home screen
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap the card tile to enter the card details page
 - tapOn:
-    label: Tap on card tile to navigate to My Card screen
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
-# Assert that no physical card elements are showing (confirming virtual card)
 - assertNotVisible:
-    label: Verify Virtual Card visible
+    label: Confirm card is virtual by checking chip/NFC not present
     id: ${output.cards.cardChipAndNFC}
 
-# Verify that the card is in an active state
 - assertVisible:
-    label: Verify Card details not blank
+    label: Verify card is active with details displayed
     id: ${output.cards.cardStatePresent}
 
-# Confirm "Show details" button is present
 - assertVisible:
-    label: Verify Show Card details option button visible
+    label: Verify Show Card details button visible
     id: ${output.cards.showDetailsButton}
 
-# Tap on "Show details" to start authentication
 - tapOn:
-    label: Tap on Show Card details option button
+    label: Tap Show Card details button to reveal card information
     id: ${output.cards.showDetailsButton}
 
-# Tap the passcode input area
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Enter the correct passcode
 - inputText:
     label: Enter valid passcode
     text: "888555"
 
-# Hide the keyboard to reveal the continue button
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Ensure the continue button is active
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button enabled after passcode entry
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap continue to view the card details
 - tapOn:
-    label: Tap on continue button to complete authentication for showing card details
+    label: Submit passcode to authenticate card action
     id: ${output.login.continueButton}
 
-# Verify the full card number is now displayed
 - assertVisible:
-    label: Verify Card number visible
+    label: Verify card number is displayed after authentication
     id: ${output.cards.cardNumberVisible}
 
-# Verify the expiry date is now displayed
 - assertVisible:
-    label: Verify Card expiry visible
+    label: Verify card expiry is displayed after authentication
     id: ${output.cards.cardExpiryVisible}
 
-# Verify the CVV is now displayed
 - assertVisible:
-    label: Verify CVV visible
+    label: Verify CVV is displayed after authentication
     id: ${output.cards.cvvVisible}
 
-# Confirm the button has toggled to "Hide details"
 - assertVisible:
-    label: Verify Hide Card details option button visible
+    label: Verify Show button changed to Hide details button
     id: ${output.cards.hideDetailsButton}
 
-# Check if the "Copy Card" option is available
 - assertVisible:
-    label: Verify Copy Card number option button visible
+    label: Verify Copy Card number button visible
     id: ${output.cards.copyCard}
 
-# Tap on the Copy button to simulate card number copying
 - tapOn:
-    label: Tap on Copy Card number option button
+    label: Tap Copy Card number button to copy card details
     id: ${output.cards.copyCard}
 
 # Capture screenshots of the revealed card details

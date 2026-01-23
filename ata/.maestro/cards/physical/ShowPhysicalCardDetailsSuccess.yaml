@@ -19,89 +19,72 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
-# Verify on My Card visible on Home Screen
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
 - tapOn:
-    label: Tap on card tile
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
-# Assert card is Physical card
 - assertVisible:
-    label: Verify Physical Card visible
+    label: Confirm card is physical by checking chip/NFC present
     id: ${output.cards.cardChipAndNFC}
 
-# Checking if card is ACTIVE
 - assertVisible:
-    label: Verify Card details not blank
+    label: Verify card is active with details displayed
     id: ${output.cards.cardStatePresent}
 
-# Verify if Show card details button visible
 - assertVisible:
-    label: Verify Show Card details option button visible
+    label: Verify Show Card details button visible
     id: ${output.cards.showDetailsButton}
 
-# Tap on Show card details button to proceed for passcode verification
 - tapOn:
-    label: Tap on Show Card details option button
+    label: Tap Show Card details button to reveal card information
     id: ${output.cards.showDetailsButton}
 
-# Tap on passcode first field
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
     text: "123567"
 
-# Hide hideKeyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Verify continue button is enabled with valid passcode
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button enabled after passcode entry
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap on continue button to complete verification for show card details
 - tapOn:
-    label: Tap on continue button to complete authentication for showing card details
+    label: Submit passcode to authenticate card action
     id: ${output.login.continueButton}
 
-# Verify if Card number visible
 - assertVisible:
-    label: Verify Card number visible
+    label: Verify card number is displayed after authentication
     id: ${output.cards.cardNumberVisible}
 
-# Verify if Card Expiry visible
 - assertVisible:
-    label: Verify Card expiry visible
+    label: Verify card expiry is displayed after authentication
     id: ${output.cards.cardExpiryVisible}
 
-# Verify if CVV visible
 - assertVisible:
-    label: Verify CVV visible
+    label: Verify CVV is displayed after authentication
     id: ${output.cards.cvvVisible}
 
-# Verify if Show details button changed to Hide details button
 - assertVisible:
-    label: Verify Hide Card details option button visible
+    label: Verify Show button changed to Hide details button
     id: ${output.cards.hideDetailsButton}
 
-# Copy Card number by tapping copy button
 - assertVisible:
-    label: Verify Copy Card number option button visible
+    label: Verify Copy Card number button visible
     id: ${output.cards.copyCard}
 
-# Tap on Copy Card number
 - tapOn:
-    label: Tap on Copy Card number option button
+    label: Tap Copy Card number button to copy card details
     id: ${output.cards.copyCard}
 
 # Capture platform-specific screenshots

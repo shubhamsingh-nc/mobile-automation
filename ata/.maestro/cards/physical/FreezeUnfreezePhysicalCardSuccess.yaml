@@ -5,7 +5,7 @@ tags:
   - success
   - physical_card
 ---
-# Load element definition for cards flow
+# Load element definition POM for cards flow
 - runFlow:
     label: Load element definitions for cards
     commands:
@@ -19,14 +19,12 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
-# Verify My Card visible on Home screen
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
 - tapOn:
-    label: Tap on card tile
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
 # Unfreeze card NORMALIZE STATE → Ensure card is UNFROZEN
@@ -39,89 +37,72 @@ tags:
           label: Tap on Unfreeze Card option button
           id: ${output.cards.unfreezeCardButton}
 
-        # Tap on passcode first field
       - tapOn:
-          label: Tap on passcode first field
+          label: Focus passcode input field
           id: ${output.login.codeField}
 
-        # Enter Passcode into code field
       - inputText:
           label: Enter valid passcode
           text: "123567"
 
-      # Hide keyboard
       - hideKeyboard:
           label: Hide keyboard after passcode entry
 
-      # Verify continue button is enabled with valid passcode
       - assertVisible:
-          label: Verify continue button is enabled with valid passcode
+          label: Verify continue button enabled after passcode entry
           id: ${output.login.continueButton}
           enabled: true
 
-        # Tap on continue button to complete verification for show card details
       - tapOn:
-          label: Tap on continue button to complete authentication for showing card details
+          label: Submit passcode to authenticate card action
           id: ${output.login.continueButton}
 
-# Assert card is Physical card
 - assertVisible:
-    label: Verify Physical Card visible
+    label: Confirm card is physical by checking chip/NFC present
     id: ${output.cards.cardChipAndNFC}
 
-# Checking if card is ACTIVE
 - assertVisible:
-    label: Verify Card details not blank
+    label: Verify card is active with details displayed
     id: ${output.cards.cardStatePresent}
 
-# Verify if Freeze card button visible
 - assertVisible:
-    label: Verify Freeze Card option button visible
+    label: Verify Freeze Card button visible
     id: ${output.cards.freezeCardButton}
 
-# Tap on Freeze card button to proceed for passcode verification
 - tapOn:
-    label: Tap on Freeze Card option button
+    label: Tap Freeze Card button to initiate freeze action
     id: ${output.cards.freezeCardButton}
 
-# Tap on passcode first field
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
     text: "123567"
 
-# HideKeyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Verify continue button is enabled with valid passcode
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button enabled after passcode entry
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap on continue button to complete verification for show card details
 - tapOn:
-    label: Tap on continue button to complete authentication for showing card details
+    label: Submit passcode to authenticate card action
     id: ${output.login.continueButton}
 
-# Verify if Card frozen layout visible
 - assertVisible:
     label: Verify Card frozen background visible
     id: ${output.cards.cardFrozenBackground}
 
-# Verify if Card frozen label visible
 - assertVisible:
     label: Verify Card frozen label visible
     id: ${output.cards.cardFrozenLabel}
 
-# Verify if Freeze card button label changed to Unfreeze card visible
 - assertVisible:
-    label: Verify if Freeze card button label changed to Unfreeze card visible
+    label: Verify Freeze button changed to Unfreeze button
     id: ${output.cards.unfreezeCardButton}
 
 # Capture platform-specific screenshots
@@ -139,54 +120,44 @@ tags:
     commands:
       - takeScreenshot: FreezePhysicalCardDetailIOS
 
-# Verify if UnFreeze card button visible
 - assertVisible:
-    label: Verify Unfreeze Card option button visible
+    label: Verify Unfreeze Card button visible
     id: ${output.cards.unfreezeCardButton}
 
-# Tap on Unfreeze card button to proceed for pass
 - tapOn:
-    label: Tap on Unfreeze Card option button
+    label: Tap Unfreeze Card button to initiate unfreeze action
     id: ${output.cards.unfreezeCardButton}
 
-# Tap on passcode first field
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
     text: "123567"
 
-# Hide hideKeyboard:
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Verify continue button is enabled with valid passcode
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button enabled after passcode entry
     id: ${output.login.continueButton}
     enabled: true
 
-# Tap on continue button to complete verification for show card details
 - tapOn:
-    label: Tap on continue button to complete authentication for showing card details
+    label: Submit passcode to authenticate card action
     id: ${output.login.continueButton}
 
-# Verify if Card frozen layout visible
 - assertNotVisible:
     label: Verify Card frozen background visible
     id: ${output.cards.cardFrozenBackground}
 
-# Verify if Card frozen label visible
 - assertNotVisible:
     label: Verify Card frozen label visible
     id: ${output.cards.cardFrozenLabel}
 
-# Verify if Freeze card button label changed to Unfreeze card visible
 - assertVisible:
-    label: Verify if Unfreeze card button label changed to Freeze card visible
+    label: Verify Unfreeze button changed back to Freeze button
     id: ${output.cards.freezeCardButton}
 
 # Capture platform-specific screenshots

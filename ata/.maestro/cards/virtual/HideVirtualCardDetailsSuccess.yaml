@@ -9,29 +9,24 @@ tags:
 # Execute the flow to show card details first
 - runFlow: ../../cards/virtual/ShowVirtualCardDetailsSuccess.yaml
 
-# Tap on the Hide details button to conceal card information
 - tapOn:
     label: Tap on Hide details button to hide card details
     id: ${output.cards.hideDetailsButton}
 
-# Verify that the card number is now masked or hidden
 - assertVisible:
-    label: Verify Card number hidden again
+    label: Verify card number is masked after hiding
     id: ${output.cards.cardNumberHidden}
 
-# Verify that the card expiry date is hidden
 - assertVisible:
-    label: Verify Card expiry hidden again
+    label: Verify card expiry is masked after hiding
     id: ${output.cards.cardExpiryHidden}
 
-# Verify that the CVV is hidden
 - assertVisible:
-    label: Verify CVV hidden again
+    label: Verify CVV is masked after hiding
     id: ${output.cards.cvvHidden}
 
-# Verify that the toggle button text has changed back to "Show details"
 - assertVisible:
-    label: Verify Hide details option button changed to Show details again
+    label: Verify Hide button changed back to Show details button
     id: ${output.cards.showDetailsButton}
 
 # Capture platform-specific screenshots for verification

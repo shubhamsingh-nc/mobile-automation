@@ -1,6 +1,7 @@
 flows:
   - "auth/**/*.yaml"
   - "cards/**/*.yaml"
+  - "checkout/*.yaml"
 executionOrder:
   continueOnFailure: true
   flowsOrder:
@@ -28,6 +29,11 @@ executionOrder:
     - "PhysicalCardE-commAndPOSDailyLimitSuccess"
     - "PhysicalCardE-commAndPOSMonthlyLimitSuccess"
     - "PhysicalCardE-commAndPOSYearlyLimitSuccess"
+    - "LoadFundsFromExistingCardSuccess"
+    - "LoadFundsFromNewCardSuccess"
+    - "LoadFundsFromExistingCardSuccess"
+    - "LoadFundsExceededAmountError"
+    - "LoadFundsInvalidCardDetailsError"
 
 # Test Output Configuration
 # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory

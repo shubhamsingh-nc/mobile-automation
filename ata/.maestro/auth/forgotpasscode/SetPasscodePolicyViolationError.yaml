@@ -41,7 +41,6 @@ tags:
       - tapOn:
           id: ${output.login.goToLoginButton}
 
-# Verify initial state of login screen
 - assertVisible:
     label: Verify phone number input is visible
     id: ${output.login.phoneNumberInput}
@@ -52,16 +51,13 @@ tags:
     id: ${output.login.loginButton}
     enabled: false
 
-# Enter phone number
 - tapOn:
     label: Tap on phone number input field
     id: ${output.login.phoneNumberInput}
 
-# Scroll to see full login form
 - scroll:
     label: Scroll to see full login form
 
-# Enter valid phone number
 - inputText:
     label: Enter valid phone number
     text: "508635393"
@@ -82,7 +78,6 @@ tags:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
 
-# Enter OTP into code field
 - tapOn:
     label: Tap on OTP code field
     id: ${output.login.codeField}
@@ -97,7 +92,6 @@ tags:
     label: Verify Forgot Password label visible
     id: ${output.forgotPasscode.goToForgotPasscode}
 
-# Tap on Forgot Password label to proceed to forgot password flow
 - tapOn:
     label: Tap on forgot passcode label to proceed to forgot password flow
     id: ${output.forgotPasscode.goToForgotPasscode}
@@ -107,32 +101,26 @@ tags:
     label: Verify OTP screen appears again
     id: ${output.login.codeField}
 
-# Enter OTP into code field
 - tapOn:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
-# Enter valid OTP code
 - inputText:
     label: Enter valid OTP code
     text: "0000"
 
-# Mobile number verified screen appears
 - assertVisible:
     label: Mobile number verified screen
     id: ${output.forgotPasscode.mobileNumberVerified}
 
-# Tap on verify email address button to proceed to verify email address flow
 - tapOn:
     label: Tap on verify email address button to navigate to verify email address flow
     id: ${output.forgotPasscode.verifyEmailAddressButton}
 
-# Verify email address email screen visible
 - assertVisible:
     label: Verify your email address screen appears
     id: ${output.forgotPasscode.otpVerifyEmailAddressTitle}
 
-# Tap on OTP Field
 - tapOn:
     label: Tap on email address OTP code field
     id: ${output.login.codeField}
@@ -142,28 +130,23 @@ tags:
     label: Enter valid email OTP code
     text: "0000"
 
-# Email address verified screen appears
 - assertVisible:
     label: Email address verified screen
     id: ${output.forgotPasscode.emailAddressVerified}
 
-# Tap on set passcode button to proceed to create passcode flow
 - tapOn:
     label: Tap on Set Passcode button to proceed to create passcode flow
     id: ${output.forgotPasscode.setPassCodeFlowButton}
 
-# Verify Create passcode screen visible
 - assertVisible:
     label: Verify Create passcode screen visible
     id: ${output.forgotPasscode.createPassCodeTitle}
 
-#Verify continue button is disabled initially
 - assertVisible:
     label: Verify continue button is disabled initially
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
     enabled: false
 
-# Tap on Passcode Field
 - tapOn:
     label: Tap on passcode field
     id: ${output.login.codeField}
@@ -182,7 +165,6 @@ tags:
       - inputText:
           label: Enter invalid passcode
           text: "387"
-        #Verify passcode policy violation error is visible
       - assertVisible:
           label: Verify passcode policy violation error is visible
           id: ${output.forgotPasscode.passcodePolicyViolation}
@@ -199,12 +181,10 @@ tags:
 # Clear input field
 - eraseText
 
-# Enter repetitive digits in passcode
 - inputText:
     label: Enter repetitive digits in passcode
     text: "777777"
 
-#Verify passcode policy violation error is visible
 - assertVisible:
     label: Verify passcode policy violation error is visible
     id: ${output.forgotPasscode.passcodePolicyViolation}
@@ -253,33 +233,27 @@ tags:
 
     output.passcode = sixDigitNoRepeat()}
 
-# Enter new passcode
 - inputText:
     label: Enter new valid passcode
     text: ${output.passcode}
 
-#Verify continue button is enabled
 - assertVisible:
     label: Verify continue button is enabled after passcode insertion
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
     enabled: true
 
-# Tap on continue button to proceed to confirm passcode flow
 - tapOn:
     label: Tap on continue button to proceed to confirm passcode flow
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
 
-# Tap on Show passcode to visible
 - tapOn:
     label: Tap on show passcode button
     id: ${output.forgotPasscode.showPasscodeButton}
 
-# Verify Confirm passcode screen visible
 - assertVisible:
     label: Verify Confirm passcode screen visible
     id: ${output.forgotPasscode.confirmPassCodeTitle}
 
-# Tap on Passcode Field
 - tapOn:
     label: Tap on passcode field
     id: ${output.login.codeField}
@@ -299,17 +273,14 @@ tags:
 
     output.passcode = sixDigitNoRepeat()}
 
-# Confirm the entered passcode
 - inputText:
     label: Confirm the entered passcode
     text: ${output.passcode}
 
-# Tap on continue button to proceed to confirm passcode flow
 - tapOn:
     label: Tap on continue button to proceed to confirm passcode flow
     id: ${output.forgotPasscode.confirmCreatePasscodeButton}
 
-#Verify passcode mismatch error is visible
 - assertVisible:
     label: Verify passcode mismatch error is visible
     id: ${output.forgotPasscode.passcodeMismatch}

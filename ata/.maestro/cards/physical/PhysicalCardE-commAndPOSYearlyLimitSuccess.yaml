@@ -23,100 +23,81 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
-# Verify My card visible on Home Screen
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
 - tapOn:
-    label: Tap on card tile
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
-# Verify Physical Card visible
 - assertVisible:
-    label: Verify Physical Card visible
+    label: Confirm card is physical by checking chip/NFC present
     id: ${output.cards.cardChipAndNFC}
 
-# Verifying card is not INACTIVE state
 - assertVisible:
-    label: Verifying card is not INACTIVE state
+    label: Verify card is active and not inactive
     id: ${output.cards.cardStatePresent}
 
-# Verify Card limit options visible
 - assertVisible:
-    label: Verify Card limit option visible
+    label: Verify Card limits button visible
     id: ${output.cards.limitsButton}
 
-# Tap on Card limit button to navigate to Transaction limits screen
 - tapOn:
-    label: Tap on Card limit option
+    label: Tap Card limits button to open transaction limits screen
     id: ${output.cards.limitsButton}
 
-# Verify Transaction limits controls screen visible by checking Transaction limits page title
 - assertVisible:
-    label: Verify Transactions limit screen visible
+    label: Verify Transaction limits screen title visible
     id: ${output.cardTransactionLimits.transactionLimitTitle}
 
-# Verify Ecommerce and POS transaction limit option visible
 - assertVisible:
-    label: Verify Ecommerce transaction limit option visible
+    label: Verify Ecommerce and POS transaction limit option visible
     id: ${output.cardTransactionLimits.ecommerceAndPosTransactionLimit}
 
-# Tap on Ecommerce and POS transaction limit option
 - tapOn:
-    label: Tap on Ecommerce transaction limit option
+    label: Tap Ecommerce and POS transaction limit option
     id: ${output.cardTransactionLimits.ecommerceAndPosTransactionLimit}
 
-# Verify E-commerce Yearly limit option visible
 - assertVisible:
     label: Verify Yearly limit option visible
     id: ${output.cardTransactionLimits.yearlyLimit}
 
-# Verify update limit option visible
 - assertVisible:
-    label: Verify update limit option visible
+    label: Verify update limit icon visible
     id: ${output.cardTransactionLimits.yearlyUpdateLimitIcon}
 
-# Tap on update limit option
 - tapOn:
-    label: Tap on update limit option
+    label: Tap update limit icon to open limit editor
     id: ${output.cardTransactionLimits.yearlyUpdateLimitIcon}
 
-# Verify update limit sheet visible
 - assertVisible:
     label: Verify update limit sheet visible
     id: ${output.cardTransactionLimits.updateLimitSheet}
 
-# Verify current limit value visible
 - assertVisible:
-    label: Verify current limit value visible
+    label: Verify current limit value displayed
     id: ${output.cardTransactionLimits.currentLimitValue}
 
-# Verify save limit option visible
 - assertVisible:
-    label: Verify save limit value visible
+    label: Verify save limit button visible
     id: ${output.cardTransactionLimits.saveLimit}
 
-# Verify decrease limit option visible
 - assertVisible:
     label: Verify decrease limit button visible
     id: ${output.cardTransactionLimits.decreaseLimit}
 
-# Verify increase limit option visible
 - assertVisible:
     label: Verify increase limit button visible
     id: ${output.cardTransactionLimits.increaseLimit}
 
-# Verify allowed limit visible
 - copyTextFrom:
-    label: Copy allowed limit value
+    label: Copy maximum allowed yearly limit value
     id: ${output.cardTransactionLimits.allowedLimit}
 
 # Storing the allowed limit in variable by convert it to a numeric value
 - evalScript: ${output.allowedLimit = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
 
-# Verify current limit visible
 - copyTextFrom:
     label: Copy current limit value
     id: ${output.cardTransactionLimits.currentLimitValue}
@@ -160,9 +141,8 @@ tags:
           label: Tap on increase limit button
           id: ${output.cardTransactionLimits.increaseLimit}
 
-# Verify current limit value visible
 - copyTextFrom:
-    label: Copy new limit value
+    label: Copy updated limit value
     id: ${output.cardTransactionLimits.currentLimitValue}
 
 # Storing the new limit in variable by convert it to a numeric value
@@ -177,33 +157,27 @@ tags:
           label: Tap on save limit button
           id: ${output.cardTransactionLimits.saveLimit}
 
-# Verify Passcode screen is visible
 - assertVisible:
-    label: Verify Passcode screen is visible
+    label: Verify Passcode verification screen visible
     id: ${output.login.codeField}
 
-# Tap on passcode first field
 - tapOn:
-    label: Tap on passcode first field
+    label: Focus passcode input field
     id: ${output.login.codeField}
 
-# Enter Passcode into code field
 - inputText:
     label: Enter valid passcode
     text: ${PASSCODE}
 
-# Hide keyboard after passcode entry
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
-# Tap on continue button to complete verification for show card details
 - tapOn:
-    label: Tap on continue button
+    label: Submit passcode to confirm limit update
     id: ${output.login.continueButton}
 
-# Verify Limit updated! success screen visible
 - assertVisible:
-    label: Verify Limit updated success screen visible
+    label: Verify yearly limit update success confirmation visible
     id: ${output.cardTransactionLimits.limitUpdateSuccess}
 
 # Capture platform-specific screenshots

@@ -55,7 +55,6 @@ tags:
     label: Enter valid phone number
     text: "508635393"
 
-# Verify login button is not enabled
 - assertVisible:
     label: Verify login button is now enabled
     id: ${output.login.loginButton}
@@ -111,7 +110,6 @@ tags:
     label: Verify secondary button appears on dashboard
     id: ${output.login.secondaryButton}
 
-# Tap secondary button to complete onboarding
 - tapOn:
     label: Tap secondary button to complete onboarding
     id: ${output.login.secondaryButton}

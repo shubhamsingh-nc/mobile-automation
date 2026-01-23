@@ -20,49 +20,40 @@ tags:
       PHONE: "505050525"
       PASSCODE: "123567"
 
-# Verify My card visible on Home Screen
 - assertVisible:
-    label: Verify on My Card visible on Home screen
+    label: Verify My Card tile visible on Home screen
     id: ${output.cards.homeCardTile}
 
-# Tap on My Card tile to navigate to My Card screen
 - tapOn:
-    label: Tap on card tile
+    label: Tap card tile to navigate to card details screen
     id: ${output.cards.homeCardTile}
 
-# Verify Physical Card visible
 - assertVisible:
-    label: Verify Physical Card visible
+    label: Confirm card is physical by checking chip/NFC present
     id: ${output.cards.cardChipAndNFC}
 
-# Verify Physical card is on its way banner not showing
 - assertNotVisible:
-    label: Verify Physical card is on its way banner not showing
+    label: Verify Physical card banner not showing
     id: ${output.cards.physicalCardOnItsWay}
 
-# Verifying card is not INACTIVE state
 - assertVisible:
-    label: Verifying card is not INACTIVE state
+    label: Verify card is active and not inactive
     id: ${output.cards.cardStatePresent}
 
-# Verify Card controls options visible
 - assertVisible:
-    label: Verify Card controls option visible
+    label: Verify Card controls button visible
     id: ${output.cards.cardControlsButton}
 
-# Tap on Card controls button to navigate to Card controls screen
 - tapOn:
-    label: Tap on Card controls option
+    label: Tap Card controls button to open controls screen
     id: ${output.cards.cardControlsButton}
 
-# Verify Card controls screen visible by checking Card Control page title
 - assertVisible:
-    label: Verify Card controls screen visible
+    label: Verify Card controls screen title visible
     id: ${output.cardControls.cardControlsTitle}
 
-# Verify Card control E-commerce option visible
 - assertVisible:
-    label: Verify Ecommerce option visible
+    label: Verify Ecommerce control option visible
     id: ${output.cardControls.ecommerce}
 
 # ACTIVE E-commerce NORMALIZE STATE → Ensure control is INACTIVE state
@@ -71,48 +62,39 @@ tags:
       visible:
         id: ${output.cardControls.ecommerceActive}
     commands:
-      # Tap on E-commerce option to inactivate from active state
       - tapOn:
-          label: Tap on Ecommerce option to inactive from active
+          label: Deactivate Ecommerce control if currently active
           id: ${output.cardControls.ecommerceActive}
-      # Tap on save button to save changes
       - tapOn:
-          label: Tap on save button to save changes
+          label: Save changes to deactivate Ecommerce
           id: ${output.cardControls.saveButton}
 
-      # Verify E-commerce option is now inactive
       - assertVisible:
-          label: Verify Ecommerce option is now inactive
+          label: Verify Ecommerce control is now inactive
           id: ${output.cardControls.ecommerceInactive}
 
-# Verify Ecommerce option is visible in INACTIVE state
 - assertVisible:
-    label: Verify Ecommerce option is visible in INACTIVE state
+    label: Verify Ecommerce control is in inactive state
     id: ${output.cardControls.ecommerceInactive}
 
-# Toggle to active state to make ACTIVE card available for E-commerce
 - tapOn:
-    label: Tap on Ecommerce option to activate
+    label: Activate Ecommerce control for physical card
     id: ${output.cardControls.ecommerceInactive}
 
-# Verify Save button visible on top right corner
 - assertVisible:
-    label: State change Save button visible
+    label: Verify Save button visible after state change
     id: ${output.cardControls.saveButton}
 
-# Tap to save changes to enable make active for E-commerce
 - tapOn:
-    label: Tap on save button to save changes
+    label: Save changes to activate Ecommerce
     id: ${output.cardControls.saveButton}
 
-# Verify Ecommerce option is now active
 - assertVisible:
-    label: Verify Ecommerce option is now active
+    label: Verify Ecommerce control is now active
     id: ${output.cardControls.ecommerceActive}
 
-# Verify Successful message appear
 - assertVisible:
-    label: Verify Ecommerce option is now active
+    label: Verify success message for card controls update
     text: "(?i)Your card controls have been updated successfully"
 
 # Capture platform-specific screenshots
