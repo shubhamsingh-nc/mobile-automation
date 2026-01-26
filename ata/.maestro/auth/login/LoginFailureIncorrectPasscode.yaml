@@ -1,18 +1,25 @@
-appId: com.nymcard.masaar.dev
+appId: com.nymcard.masaar
 tags:
   - auth
-  - success
+  - failure
   - login
 ---
+#Load target app id from POM
+- runFlow:
+    label: Setting target platform app id
+    commands:
+      - runScript:
+          file: ../../elements/targetApp.js
 # Load element definitions from POM
 - runFlow:
     label: Load element definitions
     commands:
       - runScript:
-          file: ../elements/login.js
+          file: ../../elements/login.js
 
 # Initialize and launch application
 - launchApp:
+    appId: ${output.targetAppId}
     label: Launch app with clean state
     clearState: true
 
@@ -34,27 +41,19 @@ tags:
       - tapOn:
           id: ${output.login.goToLoginButton}
 
-# Verify initial state of login screen
-- assertVisible:
-    label: Verify phone number input is visible
-    id: ${output.login.phoneNumberInput}
-
-- assertVisible:
-    label: Verify login button is visible and disabled
-    id: ${output.login.loginButton}
-    enabled: false
-
 # Enter phone number
 - tapOn:
     label: Tap on phone number input field
     id: ${output.login.phoneNumberInput}
 
+# Scroll to see full login form
 - scroll:
     label: Scroll to see full login form
 
+# Enter valid phone number
 - inputText:
     label: Enter valid phone number
-    text: '502562503'
+    text: "508635393"
 
 - assertVisible:
     label: Verify login button is now enabled
@@ -66,42 +65,47 @@ tags:
     label: Tap login button to request OTP
     id: ${output.login.loginButton}
 
+# Verify OTP screen visible
 - assertVisible:
     label: Verify OTP code field appears
     id: ${output.login.codeField}
 
-# Enter OTP into code field
+# Tap on OTP into code field
 - tapOn:
     label: Tap on OTP code field
     id: ${output.login.codeField}
 
+# Enter valid otp in field
 - inputText:
     label: Enter valid OTP code
-    text: '0000'
+    text: "0000"
 
 # Enter Passcode into code field
 - tapOn:
-    label: Tap on OTP code field
+    label: Tap on Passcode field
     id: ${output.login.codeField}
 
+# Enter an invalid passcode
 - inputText:
-    label: Enter valid passcode
-    text: '101419'
+    label: Enter an invalid passcode
+    text: "112233"
 
+# Hide keyboard
 - hideKeyboard:
     label: Hide keyboard after passcode entry
 
+# Verify continue button is enabled
 - assertVisible:
-    label: Verify continue button is enabled with valid passcode
+    label: Verify continue button is enabled
     id: ${output.login.continueButton}
     enabled: true
 
-# Submit passcode and complete verification
+# Enter an incorrect passcode and wait for error
 - tapOn:
     label: Tap continue button to verify passcode
     id: ${output.login.continueButton}
 
-# Navigate to home screen
+# Skip for Trust device
 - assertVisible:
     label: Verify secondary button appears on dashboard
     id: ${output.login.secondaryButton}
@@ -110,10 +114,9 @@ tags:
     label: Tap secondary button to complete onboarding
     id: ${output.login.secondaryButton}
 
-# Verify successful login to home screen
+# Check for error notification
 - assertVisible:
-    label: Verify user is on home screen with transactions
-    id: ${output.login.latestTransactionsHeader}
+    text: "Invalid username or password"
 
 # Capture platform-specific screenshots
 - runFlow:
@@ -121,11 +124,11 @@ tags:
     when:
       platform: android
     commands:
-      - takeScreenshot: LoginSuccessAndroid
+      - takeScreenshot: LoginFailureIncorrectPasscodeAndroid
 
 - runFlow:
     label: Take iOS success screenshot
     when:
       platform: ios
     commands:
-      - takeScreenshot: LoginSuccessIOS
+      - takeScreenshot: LoginFailureIncorrectPasscodeIOS

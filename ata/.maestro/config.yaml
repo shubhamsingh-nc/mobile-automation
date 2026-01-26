@@ -1,5 +1,39 @@
 flows:
-  - "auth/*"
+  - "auth/**/*.yaml"
+  - "cards/**/*.yaml"
+  - "checkout/*.yaml"
+executionOrder:
+  continueOnFailure: true
+  flowsOrder:
+    - "LoginSuccess"
+    - "LoginFailureInvalidOTP"
+    - "LoginFailureIncorrectPasscode"
+    - "ForgotPasscodeSuccess"
+    - "SetPasscodePolicyViolationError"
+    - "ShowVirtualCardDetailsSuccess"
+    - "ShowVirtualCardDetailsFailure"
+    - "ShowPhysicalCardDetailsSuccess"
+    - "ShowPhysicalCardDetailsFailure"
+    - "HideVirtualCardDetailsSuccess"
+    - "HidePhysicalCardDetailsSuccess"
+    - "FreezeUnfreezeVirtualCardSuccess"
+    - "FreezeUnfreezePhysicalCardSuccess"
+    - "VirtualCardAllowEcommerce"
+    - "PhysicalCardAllowEcommerce"
+    - "VirtualCardDailyLimitSuccess"
+    - "PhysicalCardATMWithDrawlDailyLimitSuccess"
+    - "VirtualCardMonthlyLimitSuccess"
+    - "PhysicalCardATMWithDrawlMonthlyLimitSuccess"
+    - "VirtualCardYearlyLimitSuccess"
+    - "PhysicalCardATMWithDrawlYearlyLimitSuccess"
+    - "PhysicalCardE-commAndPOSDailyLimitSuccess"
+    - "PhysicalCardE-commAndPOSMonthlyLimitSuccess"
+    - "PhysicalCardE-commAndPOSYearlyLimitSuccess"
+    - "LoadFundsFromExistingCardSuccess"
+    - "LoadFundsFromNewCardSuccess"
+    - "LoadFundsFromExistingCardSuccess"
+    - "LoadFundsExceededAmountError"
+    - "LoadFundsInvalidCardDetailsError"
 
 # Test Output Configuration
 # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory

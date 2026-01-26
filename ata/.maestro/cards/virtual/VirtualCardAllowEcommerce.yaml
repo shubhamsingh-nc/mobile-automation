@@ -1,0 +1,114 @@
+appId: com.nymcard.masaar
+
+tags:
+  - cards
+  - card_controls
+  - virtual_card
+
+---
+# Load element definition for cards
+- runFlow:
+    label: Load element definitions for cards
+    commands:
+      - runScript:
+          file: ../../elements/cards.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508655686"
+      PASSCODE: "888555"
+
+- assertVisible:
+    label: Verify My Card tile visible on Home screen
+    id: ${output.cards.homeCardTile}
+
+- tapOn:
+    label: Tap card tile to navigate to card details screen
+    id: ${output.cards.homeCardTile}
+
+- assertNotVisible:
+    label: Confirm card is virtual by checking chip/NFC not present
+    id: ${output.cards.cardChipAndNFC}
+
+- assertNotVisible:
+    label: Verify Physical card banner not showing
+    id: ${output.cards.physicalCardOnItsWay}
+
+- assertVisible:
+    label: Verify card is active and not inactive
+    id: ${output.cards.cardStatePresent}
+
+- assertVisible:
+    label: Verify Card controls button visible
+    id: ${output.cards.cardControlsButton}
+
+- tapOn:
+    label: Tap Card controls button to open controls screen
+    id: ${output.cards.cardControlsButton}
+
+- assertVisible:
+    label: Verify Card controls screen title visible
+    id: ${output.cardControls.cardControlsTitle}
+
+- assertVisible:
+    label: Verify Ecommerce control option visible
+    id: ${output.cardControls.ecommerce}
+
+# ACTIVE E-commerce NORMALIZE STATE → Ensure control is INACTIVE state
+- runFlow:
+    when:
+      visible:
+        id: ${output.cardControls.ecommerceActive}
+    commands:
+      - tapOn:
+          label: Deactivate Ecommerce control if currently active
+          id: ${output.cardControls.ecommerceActive}
+
+      - tapOn:
+          label: Save changes to deactivate Ecommerce
+          id: ${output.cardControls.saveButton}
+
+      - assertVisible:
+          label: Verify Ecommerce control is now inactive
+          id: ${output.cardControls.ecommerceInactive}
+
+- assertVisible:
+    label: Verify Ecommerce control is in inactive state
+    id: ${output.cardControls.ecommerceInactive}
+
+- tapOn:
+    label: Activate Ecommerce control for virtual card
+    id: ${output.cardControls.ecommerceInactive}
+
+- assertVisible:
+    label: Verify Save button visible after state change
+    id: ${output.cardControls.saveButton}
+
+- tapOn:
+    label: Save changes to activate Ecommerce
+    id: ${output.cardControls.saveButton}
+
+- assertVisible:
+    label: Verify Ecommerce control is now active
+    id: ${output.cardControls.ecommerceActive}
+
+- assertVisible:
+    label: Verify success message for card controls update
+    text: "(?i)Your card controls have been updated successfully"
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android E-commerce available for Virtual card screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: VirtualCardActivateEcommerceAndroid
+
+- runFlow:
+    label: Take iOS E-commerce activation success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: VirtualCardActivateEcommerceIOS

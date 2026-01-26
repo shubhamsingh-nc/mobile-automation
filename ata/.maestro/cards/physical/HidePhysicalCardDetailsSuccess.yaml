@@ -1,0 +1,45 @@
+appId: com.nymcard.masaar
+
+tags:
+  - cards
+  - success
+  - physical_cards
+
+---
+# Run flow from "LoginSuccess.yaml+ShowPysicalCardDetailsSuccess.yaml combined"
+- runFlow: ../../cards/physical/ShowPhysicalCardDetailsSuccess.yaml
+
+- tapOn:
+    label: Tap Hide details button to conceal card information
+    id: ${output.cards.hideDetailsButton}
+
+- assertVisible:
+    label: Verify card number is masked after hiding
+    id: ${output.cards.cardNumberHidden}
+
+- assertVisible:
+    label: Verify card expiry is masked after hiding
+    id: ${output.cards.cardExpiryHidden}
+
+- assertVisible:
+    label: Verify CVV is masked after hiding
+    id: ${output.cards.cvvHidden}
+
+- assertVisible:
+    label: Verify Hide button changed back to Show details button
+    id: ${output.cards.showDetailsButton}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android Hide Card details screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: HidePhysicalCardDetailsAndroid
+
+- runFlow:
+    label: Take iOS Hide Card details screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: HidePhysicalCardDetailIOS

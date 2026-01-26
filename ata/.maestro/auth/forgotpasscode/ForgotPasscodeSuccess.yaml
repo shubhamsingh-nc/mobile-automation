@@ -1,0 +1,236 @@
+appId: com.nymcard.masaar
+
+tags:
+  - auth
+  - success
+  - forgotpasscode
+---
+# Setting target platform app id and Load element definitions
+- runFlow:
+    label: Setting target platform app id and Load element definitions
+    commands:
+      - runScript:
+          file: ../../elements/targetApp.js
+      - runScript:
+          file: ../../elements/login.js
+      - runScript:
+          file: ../../elements/forgot-passcode.js
+
+# Initialize and launch application
+- launchApp:
+    appId: ${output.targetAppId}
+    label: Launch app with clean state
+    clearState: true
+
+# Handle platform-specific onboarding
+- runFlow:
+    label: Dismiss Android 16KB warning dialog
+    when:
+      platform: android
+    commands:
+      - tapOn:
+          text: OK
+          optional: true
+
+- runFlow:
+    label: Navigate to login screen on iOS
+    when:
+      platform: ios
+    commands:
+      - tapOn:
+          id: ${output.login.goToLoginButton}
+
+# Verify initial state of login screen
+- assertVisible:
+    label: Verify phone number input is visible
+    id: ${output.login.phoneNumberInput}
+
+# Verify login button is visible and disabled
+- assertVisible:
+    label: Verify login button is visible and disabled
+    id: ${output.login.loginButton}
+    enabled: false
+
+- tapOn:
+    label: Tap on phone number input field
+    id: ${output.login.phoneNumberInput}
+
+# Scroll to see full login form
+- scroll:
+    label: Scroll to see full login form
+
+- inputText:
+    label: Enter valid phone number
+    text: "508635393"
+
+# Verify login button is now enabled
+- assertVisible:
+    label: Verify login button is now enabled
+    id: ${output.login.loginButton}
+    enabled: true
+
+# Submit phone number and navigate to OTP
+- tapOn:
+    label: Tap login button to request OTP
+    id: ${output.login.loginButton}
+
+- assertVisible:
+    label: Verify OTP code field appears
+    id: ${output.login.codeField}
+
+- tapOn:
+    label: Tap on OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid OTP code
+    text: "0000"
+
+- assertVisible:
+    label: Verify Forgot Password label visible
+    id: ${output.forgotPasscode.goToForgotPasscode}
+
+- tapOn:
+    label: Tap on forgot passcode label to proceed to forgot password flow
+    id: ${output.forgotPasscode.goToForgotPasscode}
+
+- assertVisible:
+    label: Verify OTP screen appears again
+    id: ${output.login.codeField}
+
+- tapOn:
+    label: Tap on OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid OTP code
+    text: "0000"
+
+- assertVisible:
+    label: Mobile number verified screen
+    id: ${output.forgotPasscode.mobileNumberVerified}
+
+- tapOn:
+    label: Tap on verify email address button to navigate to verify email address flow
+    id: ${output.forgotPasscode.verifyEmailAddressButton}
+
+- assertVisible:
+    label: Verify your email address screen appears
+    id: ${output.forgotPasscode.otpVerifyEmailAddressTitle}
+
+- tapOn:
+    label: Tap on email address OTP code field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Enter valid email OTP code
+    text: "0000"
+
+- assertVisible:
+    label: Email address verified screen
+    id: ${output.forgotPasscode.emailAddressVerified}
+
+- tapOn:
+    label: Tap on Set Passcode button to proceed to create passcode flow
+    id: ${output.forgotPasscode.setPassCodeFlowButton}
+
+# Verify Create passcode screen visible
+- assertVisible:
+    label: Verify Create passcode screen visible
+    id: ${output.forgotPasscode.createPassCodeTitle}
+
+#Verify continue button is disabled initially
+- assertVisible:
+    label: Verify continue button is disabled initially
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+    enabled: false
+
+- tapOn:
+    label: Tap on passcode field
+    id: ${output.login.codeField}
+
+# Generate new passcode
+- evalScript: ${
+    function sixDigitNoRepeat() {
+    const digits = ['0','1','2','3','4','5','6','7','8','9'];
+
+    for (let i = digits.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = digits[i];
+    digits[i] = digits[j];
+    digits[j] = tmp;}
+
+    return digits.slice(0, 6).join('');}
+
+    output.passcode = sixDigitNoRepeat()}
+
+- tapOn:
+    label: Tap on show passcode button
+    id: ${output.forgotPasscode.showPasscodeButton}
+
+- inputText:
+    label: Enter new valid passcode
+    text: ${output.passcode}
+
+- assertVisible:
+    label: Verify continue button is enabled after passcode insertion
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+    enabled: true
+
+- tapOn:
+    label: Tap on continue button to proceed to confirm passcode flow
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+
+- tapOn:
+    label: Tap on show passcode button
+    id: ${output.forgotPasscode.showPasscodeButton}
+
+- assertVisible:
+    label: Verify Confirm passcode screen visible
+    id: ${output.forgotPasscode.confirmPassCodeTitle}
+
+- tapOn:
+    label: Tap on passcode field
+    id: ${output.login.codeField}
+
+- inputText:
+    label: Confirm the entered passcode
+    text: ${output.passcode}
+
+# Capture platform-specific screenshots for updated passcode
+- runFlow:
+    label: Take Android confirm passcode screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: ConfirmPasscodeAndroid
+
+- runFlow:
+    label: Take iOS confirm passcode screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: ConfirmPasscodeIOS
+
+- tapOn:
+    label: Tap on continue button to proceed to confirm passcode flow
+    id: ${output.forgotPasscode.confirmCreatePasscodeButton}
+
+- assertVisible:
+    label: Verify landed on Passcode updated successfully screen
+    id: ${output.forgotPasscode.passcodeUpdatedSuccessfully}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android success screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: PasscodeUpdatedSuccessAndroid
+
+- runFlow:
+    label: Take iOS success screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: PasscodeUpdatedSuccessIOS

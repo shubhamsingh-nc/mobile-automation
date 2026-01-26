@@ -1,0 +1,45 @@
+appId: com.nymcard.masaar
+
+tags:
+  - cards
+  - success
+  - virtual_cards
+
+---
+# Execute the flow to show card details first
+- runFlow: ../../cards/virtual/ShowVirtualCardDetailsSuccess.yaml
+
+- tapOn:
+    label: Tap on Hide details button to hide card details
+    id: ${output.cards.hideDetailsButton}
+
+- assertVisible:
+    label: Verify card number is masked after hiding
+    id: ${output.cards.cardNumberHidden}
+
+- assertVisible:
+    label: Verify card expiry is masked after hiding
+    id: ${output.cards.cardExpiryHidden}
+
+- assertVisible:
+    label: Verify CVV is masked after hiding
+    id: ${output.cards.cvvHidden}
+
+- assertVisible:
+    label: Verify Hide button changed back to Show details button
+    id: ${output.cards.showDetailsButton}
+
+# Capture platform-specific screenshots for verification
+- runFlow:
+    label: Take Android Hide Card details screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: HideVirtualCardDetailsAndroid
+
+- runFlow:
+    label: Take iOS Hide Card details screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: HideVirtualCardDetailIOS
