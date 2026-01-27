@@ -1,0 +1,123 @@
+appId: com.nymcard.masaar
+
+tags:
+  - checkout
+  - load_funds
+  - invalid_card
+  - failure
+
+---
+# Load element definitions POM for home screen
+- runFlow:
+    label: Initialize home screen element definitions
+    commands:
+      - runScript:
+          file: ../elements/home.js
+
+# Load element definitions POM for checkout flow
+- runFlow:
+    label: Initialize checkout element definitions
+    commands:
+      - runScript:
+          file: ../elements/checkout.js
+
+# Execute successful login sequence
+- runFlow:
+    file: ../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508622535"
+      PASSCODE: "888556"
+
+- assertVisible:
+    label: Check visibility of Load Funds tile on home screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+- tapOn:
+    label: Select Load Funds option from home screen to navigate to Select card screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+# Ensure the "Select card" screen appears by asserting screen title visibility
+- assertVisible:
+    label: Confirm Select Card screen is displayed
+    id: ${output.checkout.selectCardScreen}
+
+- assertVisible:
+    label: Check for presence of "Use Another Card" button
+    id: ${output.checkout.useAnotherCard}
+
+- tapOn:
+    label: Press "Use Another Card" button to navigate to Load Funds via screen card
+    id: ${output.checkout.useAnotherCard}
+
+# Ensure the "Load Funds via Card" screen appears by asserting screen title visibility
+- assertVisible:
+    label: Confirm "Load Funds via Card" screen is displayed
+    id: ${output.checkout.loadFundsViaCardScreen}
+
+- assertVisible:
+    label: Verify card number input field is present
+    id: ${output.checkout.cardNumberInput}
+
+- tapOn:
+    label: Tap to focus the card number input field
+    id: ${output.checkout.cardNumberInput}
+
+- inputText:
+    label: Provide an invalid card number to trigger error state
+    text: "123456789120608743"
+
+- assertVisible:
+    label: Verify card expiry date field is present
+    id: ${output.checkout.cardExpiryInput}
+
+- tapOn:
+    label: Tap to focus the card expiry date input
+    id: ${output.checkout.cardExpiryInput}
+
+# Entering expiration date which is one back from today
+- inputText:
+    label: Provide an invalid expiration date
+    text: "1225"
+
+- assertVisible:
+    label: Verify CVV input field is visible
+    id: ${output.checkout.cvvInput}
+
+- tapOn:
+    label: Tap to focus the CVV input
+    id: ${output.checkout.cvvInput}
+
+- inputText:
+    label: Provide a short an invalid CVV to trigger error
+    text: "10"
+
+# Scrolling page up to view bottom of the form so that hidden field card holder name by keyboard visible to Maestro
+- scroll:
+    label: Scroll page up to reveal more of the form
+
+- assertVisible:
+    label: Confirm cardholder name field is visible
+    id: ${output.checkout.cardHolderInput}
+
+- tapOn:
+    label: Tap to focus the cardholder name field
+    id: ${output.checkout.cardHolderInput}
+
+- inputText:
+    label: Provide the cardholder's name
+    text: "MUHAY UDDIN"
+
+# Capture platform specific screenshots
+- runFlow:
+    label: Capture Android screenshot for invalid card failure
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: LoadFundsInvalidCardDetailsErrorAndroid
+
+- runFlow:
+    label: Capture iOS screenshot for invalid card failure
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: LoadFundsInvalidCardDetailsErrorIOS

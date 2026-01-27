@@ -1,0 +1,26 @@
+// Load funds flow related elements
+// Contains all element IDs and selectors used in checkout flows
+output.checkout = {
+  loadingView: "fullscreen_loader",
+  homeLoadFundsTile: "load_funds_tile",
+  selectCardScreen: "select_card_screen",
+  useAnotherCard: "use_another_card",
+  selectCard: "card_0",
+  deleteCard: "delete_card_0",
+  selectCardConfirm: "select_card_confirm_button",
+  loadFundsViaCardScreen: "load_funds_via_card_screen",
+  cardNumberInput: "card_number_input",
+  cardExpiryInput: "card_expiry_input",
+  cvvInput: "cvv_input",
+  cardHolderInput: "card_holder_name_input",
+  saveCard: "save_card",
+  confirm: "confirm_button",
+  enterAmountInput: "enter_amount_input",
+  continueLoadFunds: "continue_load_funds",
+  transactionSummary: "transaction_summary",
+  payNow: "pay_now",
+  receiptTitle: "receipt_title",
+  transactionType: "load_funds_label",
+  backToHome: "back_to_home",
+  loadMoreFunds: "load_more_funds",
+};

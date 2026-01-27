@@ -1,0 +1,176 @@
+appId: com.nymcard.masaar
+
+tags:
+  - checkout
+  - load_funds
+  - invalid_amount
+  - failure
+
+---
+# Load element definitions POM of home screen
+- runFlow:
+    label: Load element definitions for home
+    commands:
+      - runScript:
+          file: ../elements/home.js
+
+# Load element definitions POM of checkout flow
+- runFlow:
+    label: Load element definitions for checkout
+    commands:
+      - runScript:
+          file: ../elements/checkout.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508622535"
+      PASSCODE: "888556"
+
+- assertVisible:
+    label: Verify view balance (eye button) on card visible on home screen
+    id: ${output.home.viewBalance}
+
+# Enable to view balance to let the test framework able to copy value from UI
+- tapOn:
+    label: Tap on view balance (eye button) on card
+    id: ${output.home.viewBalance}
+
+- copyTextFrom:
+    label: Copy balance amount from UI
+    id: ${output.home.balanceAmount}
+
+# Storing current balance amount in variables
+- evalScript: ${output.currentBalance = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+- assertVisible:
+    label: Verify Load Funds option tile visible on Home screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+# Tap on load funds option to navigate to Select card screen
+- tapOn:
+    label: Tap on Load funds tile option on Home Screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+# Ensuring navigated to Select Card screen by asserting screen title visibility
+- assertVisible:
+    label: Verify Select Card screen visible
+    id: ${output.checkout.selectCardScreen}
+
+- assertVisible:
+    label: Verify Use Another Card option visible
+    id: ${output.checkout.useAnotherCard}
+
+- tapOn:
+    label: Tap on use another card option to navigate to Load funds via card screen
+    id: ${output.checkout.useAnotherCard}
+
+# Ensuring navigated to Load funds via card screen by asserting screen title visibility
+- assertVisible:
+    label: Verify Use Load funds via Card screen visible
+    id: ${output.checkout.loadFundsViaCardScreen}
+
+- assertVisible:
+    label: Verify Card number input visible
+    id: ${output.checkout.cardNumberInput}
+
+# Tap on card number input
+- tapOn:
+    label: Focus input on card number input
+    id: ${output.checkout.cardNumberInput}
+
+- inputText:
+    label: Enter valid card number
+    text: "4242424242424242"
+
+- assertVisible:
+    label: Verify Card expiry input visible
+    id: ${output.checkout.cardExpiryInput}
+
+- tapOn:
+    label: Focus input on card expiry input
+    id: ${output.checkout.cardExpiryInput}
+
+- inputText:
+    label: Enter valid card expiry
+    text: "0827"
+
+- assertVisible:
+    label: Verify CVV input visible
+    id: ${output.checkout.cvvInput}
+
+- tapOn:
+    label: Focus input on CVV input field
+    id: ${output.checkout.cvvInput}
+
+- inputText:
+    label: Enter a valid CVV (3 digits)
+    text: "100"
+
+# Scroll to see full form fields
+- scroll:
+    label: Scroll to see full form
+
+# Verify Card holder name input visible
+- assertVisible:
+    label: Verify Card holder input visible
+    id: ${output.checkout.cardHolderInput}
+
+# Tap on card holder input
+- tapOn:
+    label: Focus input on Card holder input
+    id: ${output.checkout.cardHolderInput}
+
+- inputText:
+    label: Enter Card holder name in input
+    text: "MUHAY UDDIN"
+
+# Scroll to see full form fields
+- scroll:
+    label: Scroll to see full form
+
+- assertVisible:
+    label: Verify Save card toggle visible
+    id: ${output.checkout.saveCard}
+
+- tapOn:
+    label: Save card toggle
+    id: ${output.checkout.saveCard}
+
+- assertVisible:
+    label: Verify Confirm button visible
+    id: ${output.checkout.confirm}
+
+# Tap on Confirm button to navigate to enter amount screen
+- tapOn:
+    label: Tap on Confirm button
+    id: ${output.checkout.confirm}
+
+- assertVisible:
+    label: Enter amount input visible
+    id: ${output.checkout.enterAmountInput}
+
+- tapOn:
+    label: Tap on to focus on enter amount input
+    id: ${output.checkout.enterAmountInput}
+
+# Enter an exceeded amount to trigger error visibility
+- inputText:
+    label: Enter an exceeded amount
+    text: "9999999"
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Load funds exceeded amount error Android screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: LoadFundsExceededAmountErrorAndroid
+
+- runFlow:
+    label: Take Load funds exceeded amount error iOS screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: LoadFundsExceededAmountErrorIOS
