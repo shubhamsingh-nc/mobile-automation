@@ -1,0 +1,242 @@
+appId: com.nymcard.masaar
+androidWebViewHierarchy: devtools
+
+tags:
+  - checkout
+  - load_funds
+  - existing_card
+  - success
+
+---
+# Load element definitions from POM of home screen
+- runFlow:
+    label: Load element definitions for home
+    commands:
+      - runScript:
+          file: ../elements/home.js
+
+# Load element definitions from POM of checkout flow
+- runFlow:
+    label: Load element definitions for checkout
+    commands:
+      - runScript:
+          file: ../elements/checkout.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508622535"
+      PASSCODE: "888556"
+
+- assertVisible:
+    label: Verify view balance (eye button) on card visible on home screen
+    id: ${output.home.viewBalance}
+
+# Enable to view balance to let the test framework able to copy value from UI
+- tapOn:
+    label: Tap on view balance button
+    id: ${output.home.viewBalance}
+
+- copyTextFrom:
+    label: Copy balance amount
+    id: ${output.home.balanceAmount}
+
+# Storing current balance formatted copied from UI
+- evalScript: ${output.oldBalanceFormatted = maestro.copiedText}
+
+# Storing current balance copied from UI
+- evalScript: ${output.oldBalance = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+- assertVisible:
+    label: Verify Load Funds option visible on Home screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+# Tap on load funds option to navigate to Select card screen
+- tapOn:
+    label: Tap on Load funds tile option on Home Screen
+    id: ${output.checkout.homeLoadFundsTile}
+
+# Ensuring navigated to Select Card screen by asserting screen title visibility
+- assertVisible:
+    label: Verify Select Card screen visible
+    id: ${output.checkout.selectCardScreen}
+
+- assertVisible:
+    label: Any card visible in the cards list
+    id: ${output.checkout.selectCard}
+
+- tapOn:
+    label: Tap on card select option
+    id: ${output.checkout.selectCard}
+
+- assertVisible:
+    label: Verify Confirm button visible
+    id: ${output.checkout.selectCardConfirm}
+
+# Navigate to Enter amount screen by tapping confirm
+- tapOn:
+    label: Tap select card confirm button
+    id: ${output.checkout.selectCardConfirm}
+
+# Ensuring navigated to Enter amount screen by asserting screen title visibility
+- assertVisible:
+    label: Enter amount input visible
+    id: ${output.checkout.enterAmountInput}
+
+- tapOn:
+    label: Tap on enter amount input
+    id: ${output.checkout.enterAmountInput}
+
+- inputText:
+    label: Enter some amount
+    text: "100"
+
+- assertVisible:
+    label: Verify Continue button visible
+    id: ${output.checkout.continueLoadFunds}
+    enabled: true
+
+# Tap on continue button to view transaction summary screen
+- tapOn:
+    label: Tap on Continue button to view transaction summary screen
+    id: ${output.checkout.continueLoadFunds}
+
+# Waiting for loading view to be dismissed with an arbitrary timeout value
+- runFlow:
+    when:
+      platform: ios
+    commands:
+      - extendedWaitUntil:
+          notVisible:
+            id: loadingView
+          timeout: 30000
+
+# Verify Transaction summary screen visible
+- assertVisible:
+    label: Verify Transaction summary visible
+    id: ${output.checkout.transactionSummary}
+
+- assertVisible:
+    label: Verify Pay now button visible
+    id: ${output.checkout.payNow}
+
+# Tap on Pay now button to proceed to 3DS checkout authentication
+- tapOn:
+    label: Tap on Pay now button to proceed to 3DS checkout authentication
+    id: ${output.checkout.payNow}
+
+# Waiting for 25 seconds to let the webview loads completely
+- extendedWaitUntil:
+    label: Wait for 3DS checkout authentication screen appear
+    visible: "Hint: Checkout1!"
+    timeout: 25000
+
+- tapOn:
+    label: Tap on password input field for keyboard focus
+    text: "Hint: Checkout1!"
+
+- inputText:
+    label: Entering testing password to authenticate
+    text: "Checkout1!"
+
+- assertVisible:
+    label: Verify Continue button visible
+    text: "Continue"
+
+- tapOn:
+    label: Tap on Continue button to complete checkout
+    text: "Continue"
+
+# Ensuring navigated to "Transaction summary" screen by asserting screen title visibility
+- assertVisible:
+    label: Verify Transaction submitted screen visible
+    id: ${output.checkout.receiptTitle}
+
+- assertVisible:
+    label: Verify transaction type is visible and of Load fund type
+    id: ${output.checkout.transactionType}
+
+- assertVisible:
+    label: Verify back to home button visible
+    id: ${output.checkout.backToHome}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Load funds successful Android screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: LoadFundsViaCardSuccessAndroid
+
+- runFlow:
+    label: Take Load funds successful screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: LoadFundsViaCardSuccessIOS
+
+# Adding some delay for 25 seconds for completion of payment leg before viewing new balance
+# Just a hack to let the balance update
+# This is an arbitrary time to let the balance update
+- extendedWaitUntil:
+    visible: "*"
+    optional: true
+    timeout: 25000
+
+- tapOn:
+    label: Tap on back to home button
+    id: ${output.checkout.backToHome}
+
+- assertVisible:
+    label: Verify view balance button visible on home screen
+    id: ${output.home.viewBalance}
+
+# To view balance in readable state from obscured state
+- tapOn:
+    label: Tap on view balance button
+    id: ${output.home.viewBalance}
+
+- copyTextFrom:
+    label: Copy balance amount value from UI
+    id: ${output.home.balanceAmount}
+
+# Storing updated balance in variable i.e copied from UI
+- evalScript: ${output.updatedBalance = Number(maestro.copiedText.replace(/[^0-9.]/g, ""))}
+
+# Checking if card balance updated after loading funds
+- evalScript: ${
+    const current = output.oldBalance;
+    const newBalance = output.updatedBalance;
+
+    if (newBalance > current) {
+        output.action = "BALANCE_UPDATED";
+    }
+
+    else if (newBalance === current) {
+        output.action = "BALANCE_NOT_UPDATED";
+    }}
+
+# Checking if old balance value not visible
+- assertNotVisible:
+    label: Verify if Old balance value not visible
+    text: ${output.oldBalanceFormatted}
+
+# Capturing screenshot only if balance updated case true
+- runFlow:
+    when:
+      true: ${output.action === "BALANCE_UPDATED"}
+    commands:
+      - runFlow:
+          label: Take Load funds successful Android screenshot
+          when:
+            platform: android
+          commands:
+            - takeScreenshot: LoadFundsViaCardBalanceUpdatedSuccessAndroid
+
+      - runFlow:
+          label: Take Load funds successful screenshot
+          when:
+            platform: ios
+          commands:
+            - takeScreenshot: LoadFundsViaCardBalanceUpdatedSuccessIOS
