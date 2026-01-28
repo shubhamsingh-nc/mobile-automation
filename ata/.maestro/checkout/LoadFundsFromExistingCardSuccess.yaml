@@ -176,7 +176,8 @@ tags:
     commands:
       - takeScreenshot: LoadFundsViaCardSuccessIOS
 
-# Adding some delay for 25 seconds for completion of payment leg before viewing new balance
+# TODO: Needs to be replace with appropriate solution
+# Adding some delay for 25 seconds for completion of payment processing on Checkout.com PCI widget end before viewing new balance
 # Just a hack to let the balance update
 # This is an arbitrary time to let the balance update
 - extendedWaitUntil:
