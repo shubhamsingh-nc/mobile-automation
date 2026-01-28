@@ -3,21 +3,18 @@ appId: com.nymcard.masaar
 tags:
   - settings
 ---
-# Load element definitions POM of home screen
 - runFlow:
     label: Load element definitions for home
     commands:
       - runScript:
           file: ../elements/home.js
 
-# Load element definitions POM of navigation
 - runFlow:
     label: Load element definitions for navigation
     commands:
       - runScript:
           file: ../elements/navigation.js
 
-# Load element definitions POM of settings flow
 - runFlow:
     label: Load element definitions for settings
     commands:
@@ -73,9 +70,9 @@ tags:
     when:
       platform: iOS
     commands:
-        - assertVisible:
-            label: "Verify navigated back to Sign up screen after Log out"
-            id: ${output.login.goToLoginButton}
+      - assertVisible:
+          label: "Verify navigated back to Sign up screen after Log out"
+          id: ${output.login.goToLoginButton}
 
 # Capture platform-specific screenshots
 - runFlow:
