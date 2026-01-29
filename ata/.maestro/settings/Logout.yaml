@@ -1,0 +1,90 @@
+appId: com.nymcard.masaar
+
+tags:
+  - settings
+---
+- runFlow:
+    label: Load element definitions for home
+    commands:
+      - runScript:
+          file: ../elements/home.js
+
+- runFlow:
+    label: Load element definitions for navigation
+    commands:
+      - runScript:
+          file: ../elements/navigation.js
+
+- runFlow:
+    label: Load element definitions for settings
+    commands:
+      - runScript:
+          file: ../elements/settings.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508622535"
+      PASSCODE: "888556"
+
+- assertVisible:
+    label: "Verify Settings tab menu visible"
+    id: ${output.navigation.settings}
+
+- tapOn:
+    label: "Tap on Settings menu to navigate to settings screen"
+    id: ${output.navigation.settings}
+
+- assertVisible:
+    label: "Verify Logout option visible"
+    id: ${output.settings.logout}
+
+- tapOn:
+    label: "Tap on Logout option to logout"
+    id: ${output.settings.logout}
+
+- assertVisible:
+    label: "Verify Logout confirmation dialog appears"
+    id: ${output.settings.rootLayout}
+
+- assertVisible:
+    label: "Verify Logout button visible in confirmation dialog"
+    id: ${output.settings.confirmLogout}
+
+- tapOn:
+    label: "Tap on Logout button to logout"
+    id: ${output.settings.confirmLogout}
+
+- runFlow:
+    label: "Verify navigated back to Login screen after Log out"
+    when:
+      platform: Android
+    commands:
+      - assertVisible:
+          label: "Verify navigated back to Login screen after Log out"
+          id: ${output.login.loginScreen}
+
+- runFlow:
+    label: "Verify navigated back to Sign up screen after Log out"
+    when:
+      platform: iOS
+    commands:
+      - assertVisible:
+          label: "Verify navigated back to Sign up screen after Log out"
+          id: ${output.login.goToLoginButton}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android logout user screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: SettingsUserLogoutAndroid
+
+- runFlow:
+    label: Take iOS logout user screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: SettingUserLogoutIOS

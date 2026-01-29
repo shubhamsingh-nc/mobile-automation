@@ -2,6 +2,7 @@ flows:
   - "auth/**/*.yaml"
   - "cards/**/*.yaml"
   - "checkout/*.yaml"
+  - "settings/*.yaml"
 executionOrder:
   continueOnFailure: true
   flowsOrder:
@@ -34,6 +35,8 @@ executionOrder:
     - "LoadFundsFromExistingCardSuccess"
     - "LoadFundsExceededAmountError"
     - "LoadFundsInvalidCardDetailsError"
+    - "ViewProfile"
+    - "Logout"
 
 # Test Output Configuration
 # All test artifacts (screenshots, logs, reports, recordings) will be stored in this directory

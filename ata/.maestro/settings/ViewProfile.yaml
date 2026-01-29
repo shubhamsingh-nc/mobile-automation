@@ -1,0 +1,65 @@
+appId: com.nymcard.masaar
+
+tags:
+  - settings
+  - profile
+---
+- runFlow:
+    label: Load element definitions for home
+    commands:
+      - runScript:
+          file: ../elements/home.js
+
+- runFlow:
+    label: Load element definitions for navigation
+    commands:
+      - runScript:
+          file: ../elements/navigation.js
+
+- runFlow:
+    label: Load element definitions for settings
+    commands:
+      - runScript:
+          file: ../elements/settings.js
+
+# Run login flow from "LoginSuccess.yaml"
+- runFlow:
+    file: ../auth/login/LoginSuccess.yaml
+    env:
+      PHONE: "508622535"
+      PASSCODE: "888556"
+
+- assertVisible:
+    label: "Verify Settings tab menu visible"
+    id: ${output.navigation.settings}
+
+- tapOn:
+    label: "Tap on Settings menu to navigate to settings screen"
+    id: ${output.navigation.settings}
+
+- assertVisible:
+    label: "Verify View profile option visible"
+    id: ${output.settings.viewProfile}
+
+- tapOn:
+    label: "Tap on View profile option to navigate to profile screen"
+    id: ${output.settings.viewProfile}
+
+- assertVisible:
+    label: "Verify Profile screen visible"
+    id: ${output.settings.profileScreen}
+
+# Capture platform-specific screenshots
+- runFlow:
+    label: Take Android View user profile screenshot
+    when:
+      platform: android
+    commands:
+      - takeScreenshot: SettingsViewProfileAndroid
+
+- runFlow:
+    label: Take iOS View user profile screenshot
+    when:
+      platform: ios
+    commands:
+      - takeScreenshot: SettingsViewProfileIOS

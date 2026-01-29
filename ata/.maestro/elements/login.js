@@ -2,6 +2,7 @@
 // Contains all element IDs and selectors used in login flows
 
 output.login = {
+  loginScreen: 'login_screen',
   // Initial navigation
   goToLoginButton: 'go_to_login_btn',
 
