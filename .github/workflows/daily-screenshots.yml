@@ -1,0 +1,143 @@
+name: Daily Screenshot Capture
+
+on:
+  schedule:
+    # 6:00 AM Dubai time (UTC+4) = 2:00 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    # Allow manual triggers for testing
+
+jobs:
+  screenshots-android:
+    name: Android Screenshots
+    runs-on: [self-hosted, android-device]
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Maestro installation
+        run: maestro --version
+
+      - name: Detect connected Android devices
+        id: android-devices
+        run: |
+          # Count connected Android devices (exclude header line and offline devices)
+          device_count=$(adb devices | grep -E "device$" | wc -l | tr -d ' ')
+          echo "Connected Android devices: $device_count"
+          adb devices -l
+          echo "device_count=$device_count" >> $GITHUB_OUTPUT
+
+      - name: Discover and run tests for all clients
+        run: |
+          device_count=${{ steps.android-devices.outputs.device_count }}
+
+          # Find all client directories with .maestro/config.yaml
+          for config in */.maestro/config.yaml; do
+            client_dir=$(dirname $(dirname "$config"))
+            echo "Running tests for client: $client_dir"
+
+            # Create test output directory
+            mkdir -p "$client_dir/test-output"
+
+            # Run Maestro tests with JUnit report
+            # Use --shard-all to run same tests on ALL connected devices
+            # This captures screenshots from every device in the farm
+            if [ "$device_count" -gt 1 ]; then
+              echo "Running on $device_count devices with --shard-all"
+              maestro test \
+                --shard-all "$device_count" \
+                --format junit \
+                --output "$client_dir/test-output/junit-report.xml" \
+                "$client_dir/.maestro/" || true
+            else
+              echo "Running on single device"
+              maestro test \
+                --format junit \
+                --output "$client_dir/test-output/junit-report.xml" \
+                "$client_dir/.maestro/" || true
+            fi
+          done
+
+      - name: Upload Android screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: android-screenshots
+          path: |
+            */test-output/**/*.png
+            */test-output/**/*.jpg
+            */test-output/**/junit-report.xml
+          retention-days: 30
+
+  screenshots-ios:
+    name: iOS Screenshots
+    runs-on: [self-hosted, ios-device]
+    continue-on-error: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Verify Maestro installation
+        run: maestro --version
+
+      - name: Detect connected iOS devices
+        id: ios-devices
+        run: |
+          # Count booted simulators and physical devices
+          simulator_count=$(xcrun simctl list devices booted | grep -E "^\s+.+\(Booted\)" | wc -l | tr -d ' ')
+          physical_count=$(idevice_id -l 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+          device_count=$((simulator_count + physical_count))
+
+          echo "Booted simulators: $simulator_count"
+          echo "Physical iOS devices: $physical_count"
+          echo "Total iOS devices: $device_count"
+
+          xcrun simctl list devices booted || true
+          idevice_id -l 2>/dev/null || true
+
+          echo "device_count=$device_count" >> $GITHUB_OUTPUT
+
+      - name: Discover and run tests for all clients
+        run: |
+          device_count=${{ steps.ios-devices.outputs.device_count }}
+
+          # Find all client directories with .maestro/config.yaml
+          for config in */.maestro/config.yaml; do
+            client_dir=$(dirname $(dirname "$config"))
+            echo "Running tests for client: $client_dir"
+
+            # Create test output directory
+            mkdir -p "$client_dir/test-output"
+
+            # Run Maestro tests with JUnit report
+            # Use --shard-all to run same tests on ALL connected devices
+            # This captures screenshots from every device in the farm
+            if [ "$device_count" -gt 1 ]; then
+              echo "Running on $device_count devices with --shard-all"
+              maestro test \
+                --shard-all "$device_count" \
+                --format junit \
+                --output "$client_dir/test-output/junit-report.xml" \
+                "$client_dir/.maestro/" || true
+            else
+              echo "Running on single device"
+              maestro test \
+                --format junit \
+                --output "$client_dir/test-output/junit-report.xml" \
+                "$client_dir/.maestro/" || true
+            fi
+          done
+
+      - name: Upload iOS screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-screenshots
+          path: |
+            */test-output/**/*.png
+            */test-output/**/*.jpg
+            */test-output/**/junit-report.xml
+          retention-days: 30

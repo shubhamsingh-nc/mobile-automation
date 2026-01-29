@@ -186,6 +186,20 @@ Maestro generates artifacts in `<client>/test-output/`:
 | `runFlow: { file: "path" }` | Execute another flow |
 | `runScript: { file: "path.js" }` | Execute JavaScript file |
 
+## Documentation
+
+| Guide | Audience | Description |
+|-------|----------|-------------|
+| [Test Farm Setup](docs/TEST_FARM_SETUP.md) | DevOps / QA Leads | Setting up self-hosted runners, device farms, and CI infrastructure |
+
+## CI/CD
+
+This repository includes automated workflows:
+
+- **Daily Screenshot Capture** (`.github/workflows/daily-screenshots.yml`): Runs tests on all connected devices at 6 AM Dubai time to capture screenshots before QA starts work. Uses `--shard-all` to run on every device in the farm.
+
+See [Test Farm Setup](docs/TEST_FARM_SETUP.md) for runner configuration.
+
 ## Resources
 
 - **Maestro Documentation**: [https://docs.maestro.dev/](https://docs.maestro.dev/)
